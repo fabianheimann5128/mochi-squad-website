@@ -10,3 +10,6 @@ python3 -m http.server 4412
 Every push to `main` goes live on https://mochi-squad.com.
 
 `mochi.js` draws the 2D Mochis; outline and lighting follow the app's avatar, adapted from Rakazo (Apache-2.0).
+
+Bundled so that the page loads nothing from other servers: three.js r160 (MIT, `vendor/THREE-LICENSE`) and the
+Geist typefaces by Vercel (SIL Open Font License 1.1).

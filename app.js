@@ -124,6 +124,7 @@ bits.visible = false; scene.add(bits);
 // ───────── chapter states ─────────
 const arcX = (i) => (i - 4.5) * 1.5, arcZ = (i) => -2.6 + Math.abs(i - 4.5) * 0.55;
 function layout(k, i) {
+  if (narrow() && (k === 1 || k >= 7)) { const j = (i + 1) % N; return { x: (j % 3 - 1) * 1.75, z: (1 - Math.floor(j / 3)) * 1.9, s: 0.9, jump: k === 8 ? 1 : 0 }; }
   switch (k) {
     case 0: return i === 0 ? { x: 0, z: 0, s: 0.95 } : { x: arcX(i), y: 13 + i * 1.4, z: arcZ(i), s: 0.9 };
     case 1: return i === 0 ? { x: 0, z: 1.1, s: 1.05 } : { x: arcX(i), z: arcZ(i), s: 0.9 };
@@ -136,16 +137,17 @@ function layout(k, i) {
     default: return { x: (i - 4) * 1.4, z: -Math.abs(i - 4) * 0.3, s: 0.95, jump: 1 };
   }
 }
+const GRID = { p: [0, 10.5, 22], l: [0, 0.7, 0], far: 1 }; // phones: the rows become a 3 × 3 block seen from above
 const SHOTS = [
-  { p: [0, 1.5, 9.5], l: [0, 1.0, 0], sx: 0, sy: 0.3 },
-  { p: [0, 2.4, 17], l: [0, 1.0, 0], sx: 0, sy: 0.24 },
-  { p: [0, 12, 13.5], l: [0, 0.3, 0], sx: -0.29, sy: 0 },
-  { p: [0, 3.6, 15], l: [0, 0.8, 0], sx: 0.25, sy: 0.06 },
-  { p: [0, 2.2, 14], l: [0, 1.0, 0], sx: 0.07, sy: 0.24 },
-  { p: [7.5, 6.6, 15.5], l: [0, 1.0, 0], sx: -0.24, sy: 0.02 },
-  { p: [0, 2.2, 11.5], l: [0, 1.25, 0], sx: 0.25, sy: 0.02 },
-  { p: [0, 1.4, 16.5], l: [0, 2.2, 0], sx: 0, sy: 0.27 },
-  { p: [0, 1.6, 15], l: [0, 2.2, 0], sx: 0, sy: 0.17 },
+  { p: [0, 1.5, 9.5], l: [0, 1.0, 0], sx: 0, sy: 0.3, m: { sy: 0.13, far: 1.75 } },
+  { p: [0, 2.4, 17], l: [0, 1.0, 0], sx: 0, sy: 0.24, m: { ...GRID, sy: 0.2 } },
+  { p: [0, 12, 13.5], l: [0, 0.3, 0], sx: -0.29, sy: 0, m: { sy: 0.2, far: 1.75 } },
+  { p: [0, 3.6, 15], l: [0, 0.8, 0], sx: 0.25, sy: 0.06, m: { p: [0, 7, 15], sy: 0.2, far: 1.7 } },
+  { p: [0, 2.2, 14], l: [0, 1.0, 0], sx: 0.07, sy: 0.24, m: { p: [0, 2.2, 14], l: [-2.6, 1.0, 0], sy: 0.36, far: 1.5 } },
+  { p: [7.5, 6.6, 15.5], l: [0, 1.0, 0], sx: -0.24, sy: 0.02, m: { sy: 0.2, far: 1.7 } },
+  { p: [0, 2.2, 11.5], l: [0, 1.25, 0], sx: 0.25, sy: 0.02, m: { sy: 0.3, far: 1.75 } },
+  { p: [0, 1.4, 16.5], l: [0, 2.2, 0], sx: 0, sy: 0.27, m: { ...GRID, sy: 0.3 } },
+  { p: [0, 1.6, 15], l: [0, 2.2, 0], sx: 0, sy: 0.17, m: { ...GRID, sy: 0.2 } },
 ];
 const MOOD = [
   { glow: [16, 26, 58] }, { glow: [44, 18, 60] }, { glow: [12, 44, 36] }, { glow: [8, 14, 52], night: 1 }, { glow: [58, 16, 40] },
@@ -241,13 +243,13 @@ function frame() {
     bits.instanceMatrix.needsUpdate = true;
   }
 
-  // Camera
-  const a = SHOTS[k], b = SHOTS[k + 1], wide = !narrow(), far = wide ? 1 : 1.9;
+  // Camera. On phones every shot has its own framing: the scene sits below the text and stays inside a narrow frame.
+  const wide = !narrow(), shot = (n) => { const o = SHOTS[n], m = o.m ?? {}; return wide ? { p: o.p, l: o.l, sx: o.sx, sy: o.sy, far: 1 } : { p: m.p ?? o.p, l: m.l ?? o.l, sx: 0, sy: m.sy ?? 0.3, far: m.far ?? 1.9 }; };
+  const a = shot(k), b = shot(k + 1);
   aim.set(lerp(a.l[0], b.l[0], t), lerp(a.l[1], b.l[1], t), lerp(a.l[2], b.l[2], t));
-  eye.set(lerp(a.p[0], b.p[0], t), lerp(a.p[1], b.p[1], t), lerp(a.p[2], b.p[2], t)).sub(aim).multiplyScalar(far).add(aim);
+  eye.set(lerp(a.p[0], b.p[0], t), lerp(a.p[1], b.p[1], t), lerp(a.p[2], b.p[2], t)).sub(aim).multiplyScalar(lerp(a.far, b.far, t)).add(aim);
   camera.position.set(eye.x + pointer.sx * 0.7, eye.y - pointer.sy * 0.4, eye.z); camera.lookAt(aim);
-  const sx = wide ? lerp(a.sx, b.sx, t) : 0, sy = wide ? lerp(a.sy, b.sy, t) : Math.max(0.3, lerp(a.sy, b.sy, t) + 0.08);
-  camera.setViewOffset(width, height, -sx * width, -sy * height, width, height);
+  camera.setViewOffset(width, height, -lerp(a.sx, b.sx, t) * width, -lerp(a.sy, b.sy, t) * height, width, height);
 
   // Cast
   cast.forEach((m, i) => {
@@ -274,7 +276,7 @@ function frame() {
 
   // Tags
   const near = (c, span = 0.42) => Math.abs(position - c) < span;
-  cast.forEach((m, i) => place(names[i], m, 2.45, near(1, 0.3)));
+  cast.forEach((m, i) => place(names[i], m, 2.45, near(1, 0.3) && (wide || i % 4 === 0)));
   const talking = near(2) && at.index === 2;
   TALK.forEach(([who, when], i) => { const next = TALK[i + 1]?.[1] ?? 2; place(says[i], cast[who], 2.3, talking && at.part >= when * 0.62 && at.part < next * 0.62 + 0.04); });
   [1, 5, 7].forEach((who, i) => place(zzz[i], cast[who], 2.2 + Math.sin(time * 1.5 + i) * 0.12, near(3, 0.3)));

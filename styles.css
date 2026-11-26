@@ -123,3 +123,12 @@ code { font: 500 .88em var(--mono); background: rgba(245,245,245,.1); padding: .
   .final .cta { margin-bottom: 34svh; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01s !important; transition-duration: .01s !important; } }
+
+/* legal pages */
+.legal-page .nav { position: static; }
+.legal { width: min(720px, 100% - 2 * var(--pad)); margin: 40px auto 90px; }
+.legal h1 { font: 700 clamp(44px, 7vw, 88px)/.95 var(--body); letter-spacing: -.055em; margin-bottom: 14px; }
+.legal h2 { font: 600 19px var(--body); letter-spacing: -.02em; margin: 38px 0 8px; }
+.legal p { color: var(--dim); max-width: 64ch; } .legal p + p { margin-top: 12px; } .legal .en { color: var(--faint); font-size: 15px; }
+.legal a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+.legal-foot { width: auto; margin: 0; }

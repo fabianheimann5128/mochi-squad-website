@@ -17,7 +17,8 @@ $$("[data-lines] > span").forEach((line, i) => { line.innerHTML = `<i style="--i
 
 const cursor = $("#cursor");
 const pointer = { x: innerWidth / 2, y: innerHeight / 2, cx: innerWidth / 2, cy: innerHeight / 2, nx: 0, ny: 0, sx: 0, sy: 0 };
-addEventListener("pointermove", (e) => { pointer.x = e.clientX; pointer.y = e.clientY; pointer.nx = e.clientX / innerWidth - 0.5; pointer.ny = e.clientY / innerHeight - 0.5; cursor.classList.add("on"); }, { passive: true });
+const hovers = matchMedia("(hover: hover)").matches; // on touch screens the last tap must not tilt the scene for good
+addEventListener("pointermove", (e) => { if (!hovers || e.pointerType === "touch") return; pointer.x = e.clientX; pointer.y = e.clientY; pointer.nx = e.clientX / innerWidth - 0.5; pointer.ny = e.clientY / innerHeight - 0.5; cursor.classList.add("on"); }, { passive: true });
 document.addEventListener("pointerover", (e) => cursor.classList.toggle("big", !!e.target.closest("a, button")));
 $$("[data-magnetic]").forEach((el) => {
   el.addEventListener("pointermove", (e) => { const b = el.getBoundingClientRect(); el.style.transform = `translate(${(e.clientX - b.left - b.width / 2) * 0.22}px, ${(e.clientY - b.top - b.height / 2) * 0.3}px)`; });
@@ -137,16 +138,16 @@ function layout(k, i) {
     default: return { x: (i - 4) * 1.4, z: -Math.abs(i - 4) * 0.3, s: 0.95, jump: 1 };
   }
 }
-const GRID = { p: [0, 10.5, 22], l: [0, 0.7, 0], far: 1 }; // phones: the rows become a 3 × 3 block seen from above
+const GRID = { p: [0, 10.5, 21.5], l: [0, 0.7, 0], far: 1 }; // phones: the rows become a 3 × 3 block seen from above
 const SHOTS = [
-  { p: [0, 1.5, 9.5], l: [0, 1.0, 0], sx: 0, sy: 0.3, m: { sy: 0.13, far: 1.75 } },
-  { p: [0, 2.4, 17], l: [0, 1.0, 0], sx: 0, sy: 0.24, m: { ...GRID, sy: 0.2 } },
-  { p: [0, 12, 13.5], l: [0, 0.3, 0], sx: -0.29, sy: 0, m: { sy: 0.2, far: 1.75 } },
-  { p: [0, 3.6, 15], l: [0, 0.8, 0], sx: 0.25, sy: 0.06, m: { p: [0, 7, 15], sy: 0.2, far: 1.7 } },
-  { p: [0, 2.2, 14], l: [0, 1.0, 0], sx: 0.07, sy: 0.24, m: { p: [0, 2.2, 14], l: [-2.6, 1.0, 0], sy: 0.36, far: 1.5 } },
-  { p: [7.5, 6.6, 15.5], l: [0, 1.0, 0], sx: -0.24, sy: 0.02, m: { sy: 0.2, far: 1.7 } },
-  { p: [0, 2.2, 11.5], l: [0, 1.25, 0], sx: 0.25, sy: 0.02, m: { sy: 0.3, far: 1.75 } },
-  { p: [0, 1.4, 16.5], l: [0, 2.2, 0], sx: 0, sy: 0.27, m: { ...GRID, sy: 0.3 } },
+  { p: [0, 1.5, 9.5], l: [0, 1.0, 0], sx: 0, sy: 0.3, m: { sy: 0.04, far: 1.6 } },
+  { p: [0, 2.4, 17], l: [0, 1.0, 0], sx: 0, sy: 0.24, m: { ...GRID, sy: 0.27 } },
+  { p: [0, 12, 13.5], l: [0, 0.3, 0], sx: -0.29, sy: 0, m: { sy: 0.2, far: 2 } },
+  { p: [0, 3.6, 15], l: [0, 0.8, 0], sx: 0.25, sy: 0.06, m: { p: [0, 7, 15], sy: 0.2, far: 1.95 } },
+  { p: [0, 2.2, 14], l: [0, 1.0, 0], sx: 0.07, sy: 0.24, m: { p: [0, 2.2, 14], l: [-3.2, 1.0, 0], sy: 0.3, far: 1.7 } },
+  { p: [7.5, 6.6, 15.5], l: [0, 1.0, 0], sx: -0.24, sy: 0.02, m: { sy: 0.25, far: 1.7 } },
+  { p: [0, 2.2, 11.5], l: [0, 1.25, 0], sx: 0.25, sy: 0.02, m: { sy: 0.36, far: 2.1 } },
+  { p: [0, 1.4, 16.5], l: [0, 2.2, 0], sx: 0, sy: 0.27, m: { ...GRID, sy: 0.36 } },
   { p: [0, 1.6, 15], l: [0, 2.2, 0], sx: 0, sy: 0.17, m: { ...GRID, sy: 0.2 } },
 ];
 const MOOD = [
@@ -168,7 +169,8 @@ function place(el, mochi, lift, on) {
   el.classList.toggle("on", on);
   if (!on) return;
   v3.set(mochi.root.position.x, mochi.root.position.y + lift * mochi.root.scale.x, mochi.root.position.z).project(camera);
-  el.style.transform = `translate(${(v3.x * 0.5 + 0.5) * innerWidth}px, ${(-v3.y * 0.5 + 0.5) * innerHeight}px)`;
+  const half = el.offsetWidth / 2 + 8; // keep the whole tag inside the screen
+  el.style.transform = `translate(${clamp((v3.x * 0.5 + 0.5) * innerWidth, half, innerWidth - half)}px, ${(-v3.y * 0.5 + 0.5) * innerHeight}px)`;
 }
 
 // ───────── builder ─────────
@@ -212,6 +214,7 @@ function chapterAt(y) {
   return { index: 0, part: 0 };
 }
 const nav = $("#nav"), railNow = $("#rail-now"), railBar = $("#rail-bar"), phoneLines = $$(".phone-chat p"), body = document.body;
+const copies = $$(".chapter .copy");
 const clock = new THREE.Clock();
 let position = 0, lastScroll = scrollY, glow = [16, 26, 58];
 const eye = new THREE.Vector3(), aim = new THREE.Vector3();
@@ -274,9 +277,12 @@ function frame() {
     m.now = { sleep };
   });
 
+  // On phones the text of a chapter appears once it has reached the top, instead of sliding through the scene.
+  if (!wide) copies.forEach((c) => { const top = c.getBoundingClientRect().top; c.classList.toggle("on", top < height * 0.05 && top > -height * 0.6); });
+
   // Tags
   const near = (c, span = 0.42) => Math.abs(position - c) < span;
-  cast.forEach((m, i) => place(names[i], m, 2.45, near(1, 0.3) && (wide || i % 4 === 0)));
+  cast.forEach((m, i) => place(names[i], m, 2.45, near(1, 0.3) && (wide || i === 0)));
   const talking = near(2) && at.index === 2;
   TALK.forEach(([who, when], i) => { const next = TALK[i + 1]?.[1] ?? 2; place(says[i], cast[who], 2.3, talking && at.part >= when * 0.62 && at.part < next * 0.62 + 0.04); });
   [1, 5, 7].forEach((who, i) => place(zzz[i], cast[who], 2.2 + Math.sin(time * 1.5 + i) * 0.12, near(3, 0.3)));

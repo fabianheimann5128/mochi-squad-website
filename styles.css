@@ -138,3 +138,32 @@ code { font: 500 .88em var(--mono); background: rgba(245,245,245,.1); padding: .
 .legal p { color: var(--dim); max-width: 64ch; } .legal p + p { margin-top: 12px; } .legal .en { color: var(--faint); font-size: 15px; }
 .legal a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 .legal-foot { width: auto; margin: 0; }
+
+/* promises and roadmap */
+.plist { list-style: none; display: grid; gap: clamp(10px, 1.6vh, 18px); margin-top: 30px; counter-reset: p; }
+.plist li { display: grid; grid-template-columns: 34px 1fr; column-gap: 12px; align-items: baseline; opacity: .32; transition: opacity .5s var(--ease), transform .6s var(--ease); counter-increment: p; }
+.plist li::before { content: "0" counter(p); font: 500 12px var(--mono); color: var(--faint); grid-row: span 2; }
+.plist li.on { opacity: 1; transform: translateX(8px); }
+.plist b { font: 700 clamp(20px, 2vw, 30px)/1.1 var(--body); letter-spacing: -.035em; }
+.plist span { grid-column: 2; color: var(--dim); font-size: clamp(14.5px, 1.1vw, 17px); max-width: 44ch; }
+.plist.road li { grid-template-columns: 64px 1fr; }
+.plist.road li::before { content: none; }
+.plist.road i { font: 500 11px var(--mono); font-style: normal; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); grid-row: span 2; padding-top: .5em; }
+.plist.road .now i { color: #4d9bff; } .plist.road .done i { color: #00c972; }
+.tag.stage { background: none; border: 0; backdrop-filter: none; font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); }
+.tag.stage.now { color: #4d9bff; }
+@media (max-width: 900px) { .plist { margin-top: 18px; gap: 9px; } .plist b { font-size: 19px; } .plist span { font-size: 14px; } .plist.road span { display: none; } .plist.road li.on span { display: block; } }
+
+/* promises: one at a time */
+.values { min-height: 330vh; }
+.kicker .count { margin-left: 14px; color: var(--text); } .kicker .count b { font-weight: 500; }
+.promises { display: grid; }
+.promise { grid-area: 1 / 1; opacity: 0; transform: translateY(38px); transition: opacity .45s var(--ease), transform .7s var(--ease); pointer-events: none; }
+.promise.on { opacity: 1; transform: none; transition-delay: .12s; }
+.promise.gone { transform: translateY(-38px); }
+.promise .big { font-size: clamp(52px, 8.4vw, 150px); }
+.promise .body { font-size: clamp(17px, 1.6vw, 24px); max-width: 30ch; margin-top: 22px; opacity: 1 !important; transform: none !important; }
+.ticks { display: flex; gap: 8px; margin-top: 44px; opacity: 0; transition: opacity .6s .3s; } .in .ticks { opacity: 1; }
+.ticks i { width: 34px; height: 3px; border-radius: 3px; background: rgba(245,245,245,.16); transition: background .4s, width .5s var(--ease); } .ticks i.on { background: var(--text); width: 64px; }
+.tag.price { background: none; border: 0; backdrop-filter: none; font: 800 clamp(34px, 4vw, 64px)/1 var(--body); letter-spacing: -.05em; color: #fff; text-shadow: 0 6px 30px rgba(0,0,0,.6); }
+@media (max-width: 900px) { .promise .big { font-size: 15vw; } .promise .body { font-size: 17px; margin-top: 12px; } .ticks { margin-top: 24px; } }

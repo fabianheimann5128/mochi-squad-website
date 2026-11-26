@@ -122,10 +122,26 @@ const bitState = Array.from({ length: CONFETTI }, () => ({ x: (Math.random() - 0
 bitState.forEach((_, i) => bits.setColorAt(i, new THREE.Color(CAST[1 + (i % (N - 1))].hex)));
 bits.visible = false; scene.add(bits);
 
+// The road: five stepping stones, one per phase. They rise out of the floor in the roadmap chapter.
+const stones = new THREE.Group();
+const stoneShape = new THREE.CylinderGeometry(1.25, 1.25, 0.1, 64), ringShape = new THREE.TorusGeometry(1.25, 0.03, 8, 96);
+const stoneLooks = [0x00c972, 0x4d9bff, 0x8a8a94, 0x6a6a74, 0x4c4c56];
+[0, 1, 2, 3, 4].forEach((j) => {
+  const lit = j < 2;
+  const disc = new THREE.Mesh(stoneShape, new THREE.MeshStandardMaterial({ color: lit ? 0x1b1f2a : 0x141416, roughness: 0.6, emissive: stoneLooks[j], emissiveIntensity: lit ? 0.22 : 0.03 }));
+  const ring = new THREE.Mesh(ringShape, new THREE.MeshBasicMaterial({ color: stoneLooks[j], transparent: true, opacity: lit ? 1 : 0.55 }));
+  ring.rotation.x = Math.PI / 2; ring.position.y = 0.06; disc.receiveShadow = true;
+  const stone = new THREE.Group(); stone.add(disc, ring); stone.userData.j = j; stones.add(stone);
+});
+scene.add(stones);
+const ring = new THREE.Mesh(new THREE.TorusGeometry(1.28, 0.035, 12, 120), new THREE.MeshBasicMaterial({ color: 0xff9ecf })); ring.visible = false; scene.add(ring);
+
 // ───────── chapter states ─────────
+let stage = 0; // which promise is on, as a smoothed number 0…4
+const FIVE = [1, 2, 3, 5, 6], STONES = [0, 1, 2, 3, 4].map((j) => [-4.4 + j * 2.0, 3.2 - j * 2.7]);
 const arcX = (i) => (i - 4.5) * 1.5, arcZ = (i) => -2.6 + Math.abs(i - 4.5) * 0.55;
 function layout(k, i) {
-  if (narrow() && (k === 1 || k >= 7)) { const j = (i + 1) % N; return { x: (j % 3 - 1) * 1.75, z: (1 - Math.floor(j / 3)) * 1.9, s: 0.9, jump: k === 8 ? 1 : 0 }; }
+  if (narrow() && (k === 1 || k === 8 || k === 10)) { const j = (i + 1) % N; return { x: (j % 3 - 1) * 1.75, z: (1 - Math.floor(j / 3)) * 1.9, s: 0.9, jump: k === 10 ? 1 : 0 }; }
   switch (k) {
     case 0: return i === 0 ? { x: 0, z: 0, s: 0.95 } : { x: arcX(i), y: 13 + i * 1.4, z: arcZ(i), s: 0.9 };
     case 1: return i === 0 ? { x: 0, z: 1.1, s: 1.05 } : { x: arcX(i), z: arcZ(i), s: 0.9 };
@@ -133,8 +149,20 @@ function layout(k, i) {
     case 3: { if (i === 3) return { x: 0, z: 0.4, s: 1 }; const j = i > 3 ? i - 1 : i, a = j / 8 * TAU + 0.4; return { x: Math.sin(a) * 3.7, z: Math.cos(a) * 3.3 - 0.6, ry: a + Math.PI, s: 0.85, sleep: 1 }; }
     case 4: return i === 0 ? { x: -0.9, z: 2.4, s: 1.05 } : { x: 1.2 + ((i - 1) % 4) * 1.5, z: -3 - Math.floor((i - 1) / 4) * 1.7, s: 0.8 };
     case 5: { if (i === 0) return { x: 0, y: 2.9, z: 0, s: 0.9 }; const j = i - 1; return { x: (j % 3 - 1) * 1.5, z: (Math.floor(j / 3) - 1) * 1.5, s: 0.7 }; }
-    case 6: return i === BUILD ? { x: 0, z: 0, s: 1.35, spin: 1 } : { x: (i % 2 ? 1 : -1) * (15 + i * 1.5), z: -3, s: 0.8 };
-    case 7: return { x: (i - 4) * 1.55, z: 0, s: 0.9 };
+    case 6: { // one promise at a time: its Mochi takes the front, the others wait behind; for the last one everybody gathers
+      const j = FIVE.indexOf(i), w = j >= 0 ? clamp(1 - Math.abs(stage - j)) : 0, gather = clamp(stage - 3);
+      const rest = j >= 0 ? { x: (j - 2) * 1.5, z: -2.2, s: 0.74 } : { x: ([0, 4, 7, 8].indexOf(i) - 1.5) * 1.9, z: -4.6, s: 0.62 };
+      const a = (i - 4) / 4 * 1.75, near = { x: Math.sin(a) * 2.9, z: 2.2 - Math.cos(a) * 2.6, s: 0.8 };
+      const back = { x: lerp(rest.x, near.x, gather), z: lerp(rest.z, near.z, gather), s: lerp(rest.s, near.s, gather) };
+      return { x: lerp(back.x, 0, w), z: lerp(back.z, 2.3, w), s: lerp(back.s, 1.3, w) };
+    }
+    case 9: { // the road: the squad on what is done, the coordinator on "now", a scout one step ahead
+      if (i === 0) return { x: STONES[1][0], z: STONES[1][1], s: 0.85 };
+      if (i === 8) return { x: STONES[2][0], z: STONES[2][1], s: 0.55 };
+      const a = (i - 1) / 7 * TAU; return { x: STONES[0][0] + Math.sin(a) * 0.95, z: STONES[0][1] + Math.cos(a) * 0.95, s: 0.42 };
+    }
+    case 7: return i === BUILD ? { x: 0, z: 0, s: 1.35, spin: 1 } : { x: (i % 2 ? 1 : -1) * (15 + i * 1.5), z: -3, s: 0.8 };
+    case 8: return { x: (i - 4) * 1.55, z: 0, s: 0.9 };
     default: return { x: (i - 4) * 1.4, z: -Math.abs(i - 4) * 0.3, s: 0.95, jump: 1 };
   }
 }
@@ -146,13 +174,15 @@ const SHOTS = [
   { p: [0, 3.6, 15], l: [0, 0.8, 0], sx: 0.25, sy: 0.06, m: { p: [0, 7, 15], sy: 0.2, far: 1.95 } },
   { p: [0, 2.2, 14], l: [0, 1.0, 0], sx: 0.07, sy: 0.24, m: { p: [0, 2.2, 14], l: [-3.2, 1.0, 0], sy: 0.3, far: 1.7 } },
   { p: [7.5, 6.6, 15.5], l: [0, 1.0, 0], sx: -0.24, sy: 0.02, m: { sy: 0.25, far: 1.7 } },
+  { p: [0, 2.7, 15.5], l: [0, 1.15, 0.6], sx: 0.27, sy: 0.04, m: { p: [0, 3.6, 19], l: [0, 1.0, 0.6], sy: 0.33, far: 1 } },
   { p: [0, 2.2, 11.5], l: [0, 1.25, 0], sx: 0.25, sy: 0.02, m: { sy: 0.36, far: 2.1 } },
   { p: [0, 1.4, 16.5], l: [0, 2.2, 0], sx: 0, sy: 0.27, m: { ...GRID, sy: 0.36 } },
+  { p: [-5, 7.2, 17.5], l: [-0.4, 0.3, -2.2], sx: -0.23, sy: 0.02, m: { p: [-5, 15, 31], l: [-0.6, 0, -2.2], sy: 0.34, far: 1 } },
   { p: [0, 1.6, 15], l: [0, 2.2, 0], sx: 0, sy: 0.17, m: { ...GRID, sy: 0.2 } },
 ];
 const MOOD = [
   { glow: [16, 26, 58] }, { glow: [44, 18, 60] }, { glow: [12, 44, 36] }, { glow: [8, 14, 52], night: 1 }, { glow: [58, 16, 40] },
-  { glow: [54, 38, 10], box: 1 }, { glow: [14, 34, 66] }, { glow: [12, 28, 60] }, { glow: [48, 18, 62], party: 1 },
+  { glow: [54, 38, 10], box: 1 }, { glow: [26, 28, 52] }, { glow: [14, 34, 66] }, { glow: [12, 28, 60] }, { glow: [10, 40, 58], road: 1 }, { glow: [48, 18, 62], party: 1 },
 ];
 const LAST = SHOTS.length - 1;
 const get = (o, key, fallback = 0) => o[key] ?? fallback;
@@ -164,6 +194,11 @@ const names = cast.map((m) => tag("", `${m.look.name}<small>${m.look.job}</small
 const TALK = [[0, 0.12, "@Mira @Otto checkout breaks on phones"], [1, 0.3, "found it: trailing space"], [2, 0.46, "fixed. @Theo review?"], [3, 0.62, "one nit, then ship it"], [0, 0.78, "nice. I'll tell the boss"]];
 const says = TALK.map(([who, , text]) => tag("say", text));
 const zzz = [1, 5, 7].map(() => tag("zzz", "z z z"));
+const price = tag("price", "$0");
+const promiseRows = $$("#promises .promise"), ticks = $$("#ticks i"), promiseCount = $("#promise-now");
+const stages = ["Done", "Now", "Next", "Later", "Beyond"].map((name, j) => tag("stage" + (j === 1 ? " now" : ""), name));
+const roadRows = $$("#road-list li");
+let promiseNow = -1;
 const v3 = new THREE.Vector3();
 function place(el, mochi, lift, on) {
   el.classList.toggle("on", on);
@@ -186,7 +221,7 @@ function dress(change, rename) {
   m.sq = 0.3; m.vy = 3;
   if (rename) { $("#b-name").textContent = pick(NAMES); $("#b-job").textContent = pick(JOBS); }
   $$("#c-hex .chip").forEach((c) => c.classList.toggle("on", +c.dataset.hex === m.look.hex)); $$("#c-top .chip").forEach((c) => c.classList.toggle("on", c.dataset.top === m.look.top));
-  MOOD[6].glow = new THREE.Color(m.look.hex).multiplyScalar(0.3).toArray().map((v) => Math.round(v * 255));
+  MOOD[7].glow = new THREE.Color(m.look.hex).multiplyScalar(0.3).toArray().map((v) => Math.round(v * 255));
 }
 $(".controls").addEventListener("click", (e) => { const c = e.target.closest(".chip"); if (c) dress(c.dataset.hex ? { hex: +c.dataset.hex } : { top: c.dataset.top }, false); });
 $("#shuffle").addEventListener("click", () => dress({ hex: pick(COLOURS.slice(1)), top: pick(TOPS) }, true));
@@ -222,7 +257,7 @@ const eye = new THREE.Vector3(), aim = new THREE.Vector3();
 function frame() {
   const dt = Math.min(clock.getDelta(), 0.05), time = clock.elapsedTime;
   const at = chapterAt(scrollY);
-  const target = Math.min(LAST, at.index + smooth(0.52, 0.98, at.part));
+  const target = Math.min(LAST, at.index + smooth(at.index === 6 ? 0.88 : 0.52, 0.98, at.part)); // the promises hold their stage longer
   position = lerp(position, target, 1 - Math.pow(0.0012, dt)); // smooth follow, frame-rate independent
   const k = Math.min(LAST - 1, Math.floor(position)), t = position - k;
   pointer.sx = lerp(pointer.sx, pointer.nx, 0.06); pointer.sy = lerp(pointer.sy, pointer.ny, 0.06);
@@ -239,6 +274,8 @@ function frame() {
   hemi.intensity = lerp(1.25, 0.16, night); key.intensity = lerp(2.6, 0.35, night); key.color.setRGB(lerp(1, 0.55, night), lerp(1, 0.68, night), 1);
   lamp.intensity = night * 420; stars.material.opacity = night * 0.9; moon.material.opacity = night; moon.visible = stars.visible = night > 0.05; moon.scale.setScalar(1.3 * night);
   box.visible = boxed > 0.01; box.position.set(0, boxSize[1] / 2 + (1 - bounce(clamp(boxed * 1.25))) * 14, 0);
+  const road = mood("road"); stones.visible = road > 0.01;
+  if (stones.visible) stones.children.forEach((stone, j) => { const up = smooth(j * 0.12, j * 0.12 + 0.5, road); stone.position.set(STONES[j][0], -0.6 + up * 0.65, STONES[j][1]); stone.scale.setScalar(0.6 + up * 0.4); });
   bits.visible = party > 0.02;
   if (bits.visible) {
     const dummy = frame.dummy ??= new THREE.Object3D();
@@ -286,6 +323,26 @@ function frame() {
   const talking = near(2) && at.index === 2;
   TALK.forEach(([who, when], i) => { const next = TALK[i + 1]?.[1] ?? 2; place(says[i], cast[who], 2.3, talking && at.part >= when * 0.62 && at.part < next * 0.62 + 0.04); });
   [1, 5, 7].forEach((who, i) => place(zzz[i], cast[who], 2.2 + Math.sin(time * 1.5 + i) * 0.12, near(3, 0.3)));
+  // Promises: one after the other lights up, and its Mochi hops. Roadmap: the phases light up along the road.
+  const step = (part) => clamp(Math.floor((part - 0.08) / 0.11), 0, 4);
+  const promise = at.index === 6 ? clamp(Math.floor((at.part - 0.1) / 0.155), 0, 4) : at.index > 6 ? 4 : 0;
+  stage = lerp(stage, promise, 1 - Math.pow(0.004, dt));
+  if (promise !== promiseNow) { promiseNow = promise; if (at.index === 6) cast[FIVE[promise]].vy = 4.4; promiseCount.textContent = promise + 1; }
+  const showing = at.index === 6;
+  promiseRows.forEach((row, j) => { row.classList.toggle("on", showing && j === promise); row.classList.toggle("gone", j < promise); });
+  ticks.forEach((tick, j) => tick.classList.toggle("on", j === promise));
+  if (near(6, 0.6)) {
+    MOOD[6].glow = new THREE.Color(cast[FIVE[Math.round(stage)]].look.hex).multiplyScalar(0.26).toArray().map((v) => Math.round(v * 255));
+    // Open: you can see right through it. Yours: a ring that keeps it together.
+    const open = cast[FIVE[1]], see = clamp(1 - Math.abs(stage - 1)) * (near(6, 0.45) ? 1 : 0);
+    if (open.material.transparent !== see > 0.02) { open.material.transparent = see > 0.02; open.material.needsUpdate = true; } open.material.opacity = 1 - see * 0.62; open.material.depthWrite = see < 0.5;
+    const mine = cast[FIVE[3]], hold = clamp(1 - Math.abs(stage - 3)) * (near(6, 0.45) ? 1 : 0);
+    ring.visible = hold > 0.02; ring.position.set(mine.root.position.x, 1.0 * mine.root.scale.x, mine.root.position.z); ring.scale.setScalar(hold * mine.root.scale.x); ring.rotation.set(Math.PI / 2 + Math.sin(time * 0.9) * 0.18, 0, time * 0.8);
+  } else { ring.visible = false; }
+  place(price, cast[FIVE[0]], 2.5, showing && promise === 0 && near(6, 0.3));
+  const phase = at.index === 9 ? step(at.part) : at.index > 9 ? 4 : -1;
+  roadRows.forEach((row, j) => row.classList.toggle("on", at.index === 9 ? j === phase : false));
+  stages.forEach((el, j) => { const on = near(9, 0.3) && stones.visible; el.classList.toggle("on", on); if (on) { v3.set(STONES[j][0], 0.1, STONES[j][1] + 1.7).project(camera); el.style.transform = `translate(${(v3.x * 0.5 + 0.5) * innerWidth}px, ${(-v3.y * 0.5 + 0.5) * innerHeight}px)`; } });
   const inPhone = at.index === 4 ? at.part : at.index > 4 ? 1 : 0;
   phoneLines.forEach((p) => p.classList.toggle("on", inPhone >= +p.dataset.at * 0.6));
 

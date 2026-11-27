@@ -62,7 +62,7 @@ code { font: 500 .88em var(--mono); background: rgba(245,245,245,.1); padding: .
 .chapter { position: relative; min-height: 190vh; padding: 0 var(--pad); }
 .chapter .copy { position: sticky; top: 0; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; max-width: min(46vw, 760px); padding: 90px 0; }
 .chapter.right .copy { margin-left: auto; }
-.chapter.top .copy { justify-content: flex-start; padding-top: 120px; }
+.chapter.top .copy { justify-content: flex-start; padding-top: 104px; }
 .chapter .copy.center { max-width: none; align-items: center; text-align: center; }
 
 .hero { min-height: 170vh; }
@@ -83,6 +83,25 @@ code { font: 500 .88em var(--mono); background: rgba(245,245,245,.1); padding: .
 .scroll-hint { position: absolute; top: calc(100svh - 44px); left: var(--pad); display: flex; gap: 10px; align-items: center; font: 500 11.5px var(--mono); color: var(--faint); white-space: nowrap; }
 .scroll-hint i { width: 1px; height: 26px; background: linear-gradient(var(--text), transparent); animation: hint 1.8s var(--ease) infinite; transform-origin: top; }
 @keyframes hint { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+
+.big .soft, .promise .big .soft { display: block; color: rgba(245,245,245,.42); }
+
+/* dock: the call to action that is always one tap away */
+.dock { position: fixed; z-index: 60; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 12px; padding: 7px 7px 7px 10px; border-radius: 999px;
+  background: rgba(18,18,22,.66); border: 1px solid rgba(245,245,245,.13); backdrop-filter: blur(22px) saturate(1.5); -webkit-backdrop-filter: blur(22px) saturate(1.5);
+  box-shadow: 0 24px 60px -18px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.07);
+  translate: -50% calc(100% + 40px); opacity: 0; transition: translate .8s var(--ease), opacity .4s; }
+.dock.on { translate: -50% 0; opacity: 1; }
+.dock > img { width: 34px; height: 34px; padding: 5px; border-radius: 50%; background: rgba(245,245,245,.06); }
+.dock-txt { display: grid; line-height: 1.2; padding-right: 10px; white-space: nowrap; } .dock-txt b { font-size: 14px; letter-spacing: -.01em; } .dock-txt span { font: 500 11px var(--mono); color: var(--faint); letter-spacing: .02em; }
+.dock .btn { height: 44px; padding: 0 18px 0 22px; }
+.dock .arrow { font-style: normal; display: inline-grid; place-items: center; width: 22px; height: 22px; margin-left: 2px; border-radius: 50%; background: #111; color: #fff; font-size: 12px; transition: transform .4s var(--ease); }
+.dock .btn:hover .arrow { transform: translateY(2px); }
+@media (max-width: 900px) {
+  .dock { left: 12px; right: 12px; translate: 0 calc(100% + 40px); justify-content: space-between; }
+  .dock.on { translate: 0 0; }
+  .dock-txt { min-width: 0; padding-right: 0; } .dock-txt span { display: none; } .dock .btn { flex: none; }
+}
 
 /* when a chapter is done its text leaves first, then the scene moves on */
 @media (min-width: 901px) {

@@ -13,7 +13,7 @@
 <link rel="canonical" href="https://mochi-squad.com/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=58b32c43b7">
+<link rel="stylesheet" href="styles.css?v=e9580e4c7c">
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
 </head>
 <body>
@@ -49,7 +49,7 @@
 <section class="chapter top">
   <div class="copy">
     <p class="kicker">01 — The squad</p>
-    <h2 class="big" data-lines><span>One is lonely.</span><span>Hire nine.</span></h2>
+    <h2 class="big" data-lines><span>One is lonely.</span><span>Hire nine.</span><span class="soft">Or ninety-nine.</span></h2>
     <p class="body">Every agent gets a name, a job, a character and a model. Claude Code or Codex, your call. They run on the subscription you already pay for.</p>
   </div>
 </section>
@@ -116,7 +116,7 @@
   <div class="copy">
     <p class="kicker">06 — Five promises <span class="count"><b id="promise-now">1</b> / 5</span></p>
     <div class="promises" id="promises">
-      <div class="promise"><h2 class="big">Free.</h2><p class="body">The app costs nothing. Not now, not later, not for anyone.</p></div>
+      <div class="promise"><h2 class="big">Free.<span class="soft">Forever.</span></h2><p class="body">The app costs nothing. Not now, not later, not for anyone.</p></div>
       <div class="promise"><h2 class="big">Open.</h2><p class="body">Open source under Apache-2.0. Nothing to hide, so read every line.</p></div>
       <div class="promise"><h2 class="big">Dead simple.</h2><p class="body">No manual, no prior knowledge. If you need a tutorial, we got it wrong.</p></div>
       <div class="promise"><h2 class="big">Yours stays yours.</h2><p class="body">Your subscription, your data, your Mac. We run no server and see none of it.</p></div>
@@ -185,7 +185,14 @@
 </section>
 </main>
 
+<!-- always one tap away: a dock that rises once the hero is gone and steps aside where the page has its own buttons -->
+<div class="dock" id="dock">
+  <img src="logo.svg" alt="">
+  <div class="dock-txt"><b>Mochi Squad</b><span>Free · open source · macOS 14+</span></div>
+  <a class="btn btn-light btn-sm" href="#install" data-magnetic>Get it for Mac<i class="arrow" aria-hidden="true">↓</i></a>
+</div>
+
 <script src="mochi.js?v=8c09a9621c"></script>
-<script type="module" src="app.js?v=0eee0800da"></script>
+<script type="module" src="app.js?v=bb0a60185f"></script>
 </body>
 </html>

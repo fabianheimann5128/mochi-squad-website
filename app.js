@@ -173,7 +173,7 @@ function layout(k, i) {
 const GRID = { p: [0, 10.5, 21.5], l: [0, 0.7, 0], far: 1 }; // phones: the rows become a 3 × 3 block seen from above
 const SHOTS = [
   { p: [0, 1.6, 11], l: [0, 1.0, 0], sx: 0, sy: 0.28, m: { sy: 0.33, far: 1.45 } },
-  { p: [0, 2.4, 17], l: [0, 1.0, 0], sx: 0, sy: 0.24, m: { ...GRID, sy: 0.27 } },
+  { p: [0, 2.4, 17], l: [0, 1.0, 0], sx: 0, sy: 0.3, m: { ...GRID, sy: 0.27 } },
   { p: [0, 12, 13.5], l: [0, 0.3, 0], sx: -0.29, sy: 0, m: { sy: 0.2, far: 2 } },
   { p: [0, 3.6, 15], l: [0, 0.8, 0], sx: 0.25, sy: 0.06, m: { p: [0, 7, 15], sy: 0.2, far: 1.95 } },
   { p: [0, 2.2, 14], l: [0, 1.0, 0], sx: 0.07, sy: 0.24, m: { p: [0, 2.2, 14], l: [-3.2, 1.0, 0], sy: 0.3, far: 1.7 } },
@@ -300,7 +300,7 @@ function chapterAt(y) {
   for (let i = bounds.length - 1; i >= 0; i--) if (line >= bounds[i].top) return { index: i, part: clamp((line - bounds[i].top) / bounds[i].height) };
   return { index: 0, part: 0 };
 }
-const nav = $("#nav"), railNow = $("#rail-now"), railBar = $("#rail-bar"), body = document.body;
+const dock = $("#dock"), nav = $("#nav"), railNow = $("#rail-now"), railBar = $("#rail-bar"), body = document.body;
 const phone = $("#phone"), phoneLines = $$(".phone-chat .msg[data-at]"), typingRow = $("#typing"), phoneSub = $("#phone-sub"), banner = $("#banner");
 const copies = $$(".chapter .copy");
 const clock = new THREE.Clock();
@@ -316,6 +316,7 @@ function frame() {
     const v = out.toFixed(3); if (c.dataset.out !== v) { c.dataset.out = v; c.style.setProperty("--out", v); }
   });
   nav.classList.toggle("at-top", scrollY < height * 0.55);
+  dock.classList.toggle("on", scrollY > height * 0.6 && at.index !== 8 && !(at.index === 7 && at.part > 0.75) && at.index !== LAST); // hidden where install and final buttons are on screen
   position = lerp(position, target, 1 - Math.pow(0.0012, dt)); // smooth follow, frame-rate independent
   const k = Math.min(LAST - 1, Math.floor(position)), t = position - k;
   pointer.sx = lerp(pointer.sx, pointer.nx, 0.06); pointer.sy = lerp(pointer.sy, pointer.ny, 0.06);
@@ -379,7 +380,7 @@ function frame() {
 
   // Tags
   const near = (c, span = 0.42) => Math.abs(position - c) < span;
-  cast.forEach((m, i) => place(names[i], m, 2.45, near(1, 0.3) && (wide || i === 0)));
+  cast.forEach((m, i) => place(names[i], m, 2.3, near(1, 0.3) && (wide || i === 0)));
   const talking = near(2) && at.index === 2;
   TALK.forEach(([who, when], i) => { const next = TALK[i + 1]?.[1] ?? 2; place(says[i], cast[who], 2.3, talking && at.part >= when * 0.62 && at.part < next * 0.62 + 0.04); });
   [1, 5, 7].forEach((who, i) => place(zzz[i], cast[who], 2.2 + Math.sin(time * 1.5 + i) * 0.12, near(3, 0.3)));

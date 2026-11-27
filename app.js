@@ -143,11 +143,15 @@ const arcX = (i) => (i - 4.5) * 1.5, arcZ = (i) => -2.6 + Math.abs(i - 4.5) * 0.
 function layout(k, i) {
   if (narrow() && (k === 1 || k === 8 || k === 10)) { const j = (i + 1) % N; return { x: (j % 3 - 1) * 1.75, z: (1 - Math.floor(j / 3)) * 1.9, s: 0.9, jump: k === 10 ? 1 : 0 }; }
   switch (k) {
-    case 0: return i === 0 ? { x: 0, z: 0, s: 0.95 } : { x: arcX(i), y: 13 + i * 1.4, z: arcZ(i), s: 0.9 };
+    case 0: { // the coordinator in front, the team in a V behind: four on each side
+      if (i === 0) return { x: 0, z: 0.7, s: 0.95 };
+      const j = i - 1, side = j % 2 ? 1 : -1, r = Math.floor(j / 2);
+      return narrow() ? { x: side * (0.95 + r * 0.62), z: -0.5 - r * 0.75, s: 0.58, ry: -side * 0.3 } : { x: side * (1.35 + r * 1.12), z: -0.3 - r * 0.6, s: 0.7, ry: -side * 0.28 };
+    }
     case 1: return i === 0 ? { x: 0, z: 1.1, s: 1.05 } : { x: arcX(i), z: arcZ(i), s: 0.9 };
     case 2: { const a = i / N * TAU; return { x: Math.sin(a) * 2.9, z: Math.cos(a) * 2.9, ry: a + Math.PI, s: 0.82 }; }
     case 3: { if (i === 3) return { x: 0, z: 0.4, s: 1 }; const j = i > 3 ? i - 1 : i, a = j / 8 * TAU + 0.4; return { x: Math.sin(a) * 3.7, z: Math.cos(a) * 3.3 - 0.6, ry: a + Math.PI, s: 0.85, sleep: 1 }; }
-    case 4: return i === 0 ? { x: -0.9, z: 2.4, s: 1.05 } : { x: 1.2 + ((i - 1) % 4) * 1.5, z: -3 - Math.floor((i - 1) / 4) * 1.7, s: 0.8 };
+    case 4: return i === 0 ? { x: 0.3, z: 2.2, s: 0.9, ry: 0.5 } : { x: -2.0 + ((i - 1) % 4) * 0.9 + Math.floor((i - 1) / 4) * 0.45, z: -3.0 - Math.floor((i - 1) / 4) * 1.4, s: 0.62, ry: 0.25 };
     case 5: { if (i === 0) return { x: 0, y: 2.9, z: 0, s: 0.9 }; const j = i - 1; return { x: (j % 3 - 1) * 1.5, z: (Math.floor(j / 3) - 1) * 1.5, s: 0.7 }; }
     case 6: { // one promise at a time: its Mochi takes the front, the others wait behind; for the last one everybody gathers
       const j = FIVE.indexOf(i), w = j >= 0 ? clamp(1 - Math.abs(stage - j)) : 0, gather = clamp(stage - 3);
@@ -168,7 +172,7 @@ function layout(k, i) {
 }
 const GRID = { p: [0, 10.5, 21.5], l: [0, 0.7, 0], far: 1 }; // phones: the rows become a 3 × 3 block seen from above
 const SHOTS = [
-  { p: [0, 1.5, 9.5], l: [0, 1.0, 0], sx: 0, sy: 0.3, m: { sy: 0.04, far: 1.6 } },
+  { p: [0, 1.6, 11], l: [0, 1.0, 0], sx: 0, sy: 0.28, m: { sy: 0.33, far: 1.45 } },
   { p: [0, 2.4, 17], l: [0, 1.0, 0], sx: 0, sy: 0.24, m: { ...GRID, sy: 0.27 } },
   { p: [0, 12, 13.5], l: [0, 0.3, 0], sx: -0.29, sy: 0, m: { sy: 0.2, far: 2 } },
   { p: [0, 3.6, 15], l: [0, 0.8, 0], sx: 0.25, sy: 0.06, m: { p: [0, 7, 15], sy: 0.2, far: 1.95 } },
@@ -181,10 +185,12 @@ const SHOTS = [
   { p: [0, 1.6, 15], l: [0, 2.2, 0], sx: 0, sy: 0.17, m: { ...GRID, sy: 0.2 } },
 ];
 const MOOD = [
-  { glow: [16, 26, 58] }, { glow: [44, 18, 60] }, { glow: [12, 44, 36] }, { glow: [8, 14, 52], night: 1 }, { glow: [58, 16, 40] },
+  { glow: [16, 26, 58], spot: 1 }, { glow: [44, 18, 60] }, { glow: [12, 44, 36] }, { glow: [8, 14, 52], night: 1 }, { glow: [58, 16, 40] },
   { glow: [54, 38, 10], box: 1 }, { glow: [26, 28, 52] }, { glow: [14, 34, 66] }, { glow: [12, 28, 60] }, { glow: [10, 40, 58], road: 1 }, { glow: [48, 18, 62], party: 1 },
 ];
 const LAST = SHOTS.length - 1;
+// Pacing per chapter: [text starts leaving, text gone, scene starts moving]. The text always leaves before the scene changes.
+const PACE = (i) => i === 0 ? [0.42, 0.57, 0.55] : i === 4 ? [0.72, 0.8, 0.78] : i === 6 ? [0.84, 0.9, 0.88] : [0.56, 0.72, 0.64];
 const get = (o, key, fallback = 0) => o[key] ?? fallback;
 
 // ───────── tags: names, speech, sleep ─────────
@@ -206,6 +212,20 @@ function place(el, mochi, lift, on) {
   v3.set(mochi.root.position.x, mochi.root.position.y + lift * mochi.root.scale.x, mochi.root.position.z).project(camera);
   const half = el.offsetWidth / 2 + 8; // keep the whole tag inside the screen
   el.style.transform = `translate(${clamp((v3.x * 0.5 + 0.5) * innerWidth, half, innerWidth - half)}px, ${(-v3.y * 0.5 + 0.5) * innerHeight}px)`;
+}
+
+// ───────── hero: the team gets hired one by one, the headline names each job ─────────
+const HIRES = ["researcher.", "developer.", "reviewer.", "writer.", "designer.", "night shift.", "data nerd.", "tester."];
+const backOut = (t) => { const c = 1.9; return t <= 0 ? 0 : 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };
+let hireAt = Infinity; const HIRE_STEP = 0.34;
+const hirePop = (i, time) => clamp((time - hireAt - (i - 1) * HIRE_STEP) / 0.5);
+const hire = $("#hire");
+function say(text, hex) { hire.textContent = text; hire.style.setProperty("--hc", hex ?? "var(--text)"); hire.classList.remove("flip"); void hire.offsetWidth; hire.classList.add("flip"); }
+function startHiring(now) {
+  hireAt = now;
+  if (scrollY > innerHeight * 0.3 || matchMedia("(prefers-reduced-motion: reduce)").matches) { hireAt = -99; return; }
+  HIRES.forEach((word, j) => setTimeout(() => { if (scrollY < innerHeight * 0.3) say(word, hexOf(CAST[j + 1].hex)); }, j * HIRE_STEP * 1000));
+  setTimeout(() => say("team."), HIRES.length * HIRE_STEP * 1000 + 250);
 }
 
 // ───────── builder ─────────
@@ -233,6 +253,24 @@ copy.addEventListener("click", async () => {
   copy.textContent = "Copied ✓"; copy.classList.add("done"); setTimeout(() => { copy.textContent = "Copy"; copy.classList.remove("done"); }, 1800);
 });
 
+// "Open.": the Mochi turns to glass so you can see right through it
+function glass(m, v) {
+  const t = v > 0.02 ? v : 0; if (m.glass === t) return; m.glass = t;
+  Object.assign(m.material, { transmission: t, thickness: 0.35, ior: 1.12, roughness: lerp(0.48, 0.1, t), clearcoat: lerp(0.22, 1, t), clearcoatRoughness: lerp(0.5, 0.05, t), sheen: 1 - t });
+  m.material.color.setHex(m.look.hex).lerp(new THREE.Color(0xffffff), t * 0.55);
+}
+
+// Click a Mochi and it hops.
+const ray = new THREE.Raycaster(), tap = new THREE.Vector2();
+addEventListener("click", (e) => {
+  if (e.target.closest("a, button, input, .term")) return;
+  tap.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(tap, camera);
+  const hit = ray.intersectObjects(cast.map((m) => m.root), true)[0];
+  if (!hit) return;
+  const m = cast.find((c) => { let o = hit.object; while (o && o !== c.root) o = o.parent; return o === c.root; });
+  if (m) { m.vy = 5.2; m.sq = 0.32; }
+});
+
 // ───────── frame loop ─────────
 let bounds = [], width = 0, height = 0;
 function measure() {
@@ -248,7 +286,8 @@ function chapterAt(y) {
   for (let i = bounds.length - 1; i >= 0; i--) if (line >= bounds[i].top) return { index: i, part: clamp((line - bounds[i].top) / bounds[i].height) };
   return { index: 0, part: 0 };
 }
-const nav = $("#nav"), railNow = $("#rail-now"), railBar = $("#rail-bar"), phoneLines = $$(".phone-chat p"), body = document.body;
+const nav = $("#nav"), railNow = $("#rail-now"), railBar = $("#rail-bar"), body = document.body;
+const phone = $("#phone"), phoneLines = $$(".phone-chat .msg[data-at]"), typingRow = $("#typing"), phoneSub = $("#phone-sub"), banner = $("#banner");
 const copies = $$(".chapter .copy");
 const clock = new THREE.Clock();
 let position = 0, lastScroll = scrollY, glow = [16, 26, 58];
@@ -257,7 +296,12 @@ const eye = new THREE.Vector3(), aim = new THREE.Vector3();
 function frame() {
   const dt = Math.min(clock.getDelta(), 0.05), time = clock.elapsedTime;
   const at = chapterAt(scrollY);
-  const target = Math.min(LAST, at.index + smooth(at.index === 6 ? 0.88 : 0.52, 0.98, at.part)); // the promises hold their stage longer
+  const target = Math.min(LAST, at.index + smooth(PACE(at.index)[2], 0.98, at.part));
+  chapters.forEach((c, i) => { // --out: 0 while the chapter's text is up, 1 once it has left
+    const out = i === LAST ? 0 : i < at.index ? 1 : i > at.index ? 0 : smooth(PACE(i)[0], PACE(i)[1], at.part);
+    const v = out.toFixed(3); if (c.dataset.out !== v) { c.dataset.out = v; c.style.setProperty("--out", v); }
+  });
+  nav.classList.toggle("at-top", scrollY < height * 0.55);
   position = lerp(position, target, 1 - Math.pow(0.0012, dt)); // smooth follow, frame-rate independent
   const k = Math.min(LAST - 1, Math.floor(position)), t = position - k;
   pointer.sx = lerp(pointer.sx, pointer.nx, 0.06); pointer.sy = lerp(pointer.sy, pointer.ny, 0.06);
@@ -272,7 +316,7 @@ function frame() {
   glow = glow.map((v, i) => lerp(v, lerp(MOOD[k].glow[i], MOOD[k + 1].glow[i], t), 0.1));
   body.style.setProperty("--bg2", `rgb(${glow.map(Math.round).join(",")})`);
   hemi.intensity = lerp(1.25, 0.16, night); key.intensity = lerp(2.6, 0.35, night); key.color.setRGB(lerp(1, 0.55, night), lerp(1, 0.68, night), 1);
-  lamp.intensity = night * 420; stars.material.opacity = night * 0.9; moon.material.opacity = night; moon.visible = stars.visible = night > 0.05; moon.scale.setScalar(1.3 * night);
+  lamp.intensity = night * 420 + mood("spot") * 160; stars.material.opacity = night * 0.9; moon.material.opacity = night; moon.visible = stars.visible = night > 0.05; moon.scale.setScalar(1.3 * night);
   box.visible = boxed > 0.01; box.position.set(0, boxSize[1] / 2 + (1 - bounce(clamp(boxed * 1.25))) * 14, 0);
   const road = mood("road"); stones.visible = road > 0.01;
   if (stones.visible) stones.children.forEach((stone, j) => { const up = smooth(j * 0.12, j * 0.12 + 0.5, road); stone.position.set(STONES[j][0], -0.6 + up * 0.65, STONES[j][1]); stone.scale.setScalar(0.6 + up * 0.4); });
@@ -295,10 +339,10 @@ function frame() {
   cast.forEach((m, i) => {
     const from = layout(k, i), to = layout(k + 1, i);
     const own = clamp(t * 1.5 - (i / N) * 0.5); // everyone leaves a little after the one before
-    const e = k === 0 ? bounce(own) : own * own * (3 - 2 * own);
+    const e = own * own * (3 - 2 * own);
     const val = (key, fallback = 0) => lerp(get(from, key, fallback), get(to, key, fallback), e);
     const sleep = val("sleep"), jump = val("jump"), spin = val("spin"), s = val("s", 1);
-    const arc = k === 0 ? 0 : Math.sin(own * Math.PI) * 0.9 * Math.min(1, Math.hypot(get(to, "x") - get(from, "x"), get(to, "z") - get(from, "z")) / 3); // a hop on the way over
+    const arc = Math.sin(own * Math.PI) * 0.9 * Math.min(1, Math.hypot(get(to, "x") - get(from, "x"), get(to, "z") - get(from, "z")) / 3); // a hop on the way over
     m.hop -= dt; if (m.hop < 0) { m.hop = 2.5 + Math.random() * 5; if (!sleep) m.vy = 2.2 + Math.random(); }
     if (jump > 0.5 && m.y <= 0.001) m.vy = 3.2 + Math.random() * 2.4;
     m.vy -= 14 * dt; m.y = Math.max(0, m.y + m.vy * dt); if (m.y === 0 && m.vy < 0) { m.sq = Math.min(0.28, -m.vy * 0.045); m.vy = 0; }
@@ -306,7 +350,9 @@ function frame() {
     const y = val("y") + arc + m.y, breathe = Math.sin(time * 1.6 + i) * 0.014, squeeze = m.sq + breathe + sleep * 0.16 - clamp(m.vy * 0.02, -0.08, 0.1);
     m.root.position.set(val("x"), y, val("z"));
     m.root.rotation.y = val("ry") + spin * time * 0.6 + (1 - sleep) * (1 - spin) * pointer.sx * 0.5;
-    m.root.scale.setScalar(s);
+    const popped = i === 0 ? 1 : lerp(backOut(hirePop(i, time)), 1, clamp(position * 3));
+    if (i > 0 && popped > 0.05 && !m.hired) { m.hired = true; m.vy = 4.2; m.sq = 0.3; }
+    m.root.scale.setScalar(s * Math.max(0.001, popped));
     m.squash.scale.set(1 + squeeze * 0.55, 1 - squeeze, 1 + squeeze * 0.55);
     m.blink -= dt; const closed = m.blink < 0.12; if (m.blink < 0) m.blink = 2 + Math.random() * 4;
     m.eyes.scale.y = sleep > 0.5 || closed ? 0.12 : 1;
@@ -335,16 +381,34 @@ function frame() {
     MOOD[6].glow = new THREE.Color(cast[FIVE[Math.round(stage)]].look.hex).multiplyScalar(0.26).toArray().map((v) => Math.round(v * 255));
     // Open: you can see right through it. Yours: a ring that keeps it together.
     const open = cast[FIVE[1]], see = clamp(1 - Math.abs(stage - 1)) * (near(6, 0.45) ? 1 : 0);
-    if (open.material.transparent !== see > 0.02) { open.material.transparent = see > 0.02; open.material.needsUpdate = true; } open.material.opacity = 1 - see * 0.62; open.material.depthWrite = see < 0.5;
+    glass(open, see);
     const mine = cast[FIVE[3]], hold = clamp(1 - Math.abs(stage - 3)) * (near(6, 0.45) ? 1 : 0);
     ring.visible = hold > 0.02; ring.position.set(mine.root.position.x, 1.0 * mine.root.scale.x, mine.root.position.z); ring.scale.setScalar(hold * mine.root.scale.x); ring.rotation.set(Math.PI / 2 + Math.sin(time * 0.9) * 0.18, 0, time * 0.8);
-  } else { ring.visible = false; }
+  } else { ring.visible = false; glass(cast[FIVE[1]], 0); }
   place(price, cast[FIVE[0]], 2.5, showing && promise === 0 && near(6, 0.3));
   const phase = at.index === 9 ? step(at.part) : at.index > 9 ? 4 : -1;
   roadRows.forEach((row, j) => row.classList.toggle("on", at.index === 9 ? j === phase : false));
   stages.forEach((el, j) => { const on = near(9, 0.3) && stones.visible; el.classList.toggle("on", on); if (on) { v3.set(STONES[j][0], 0.1, STONES[j][1] + 1.7).project(camera); el.style.transform = `translate(${(v3.x * 0.5 + 0.5) * innerWidth}px, ${(-v3.y * 0.5 + 0.5) * innerHeight}px)`; } });
-  const inPhone = at.index === 4 ? at.part : at.index > 4 ? 1 : 0;
-  phoneLines.forEach((p) => p.classList.toggle("on", inPhone >= +p.dataset.at * 0.6));
+  if (Math.abs(position - 4) < 1.3) {
+    const inPhone = at.index === 4 ? at.part : at.index > 4 ? 1 : 0;
+    const enter = wide ? smooth(0.06, 0.24, inPhone) : 1, leave = wide ? +chapters[4].dataset.out || 0 : 0;
+    if (wide) {
+      phone.style.opacity = (enter * (1 - leave)).toFixed(3);
+      const rx = (1 - enter) * 30 + 5 - pointer.sy * 9, ry = -15 + pointer.sx * 18 - (1 - enter) * 12, rz = (1 - enter) * 7 + 1.5, dy = (1 - enter) * 16 - leave * 5;
+      phone.style.transform = "perspective(1600px) translate3d(0," + dy.toFixed(2) + "vh,0) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg) rotateZ(" + rz.toFixed(2) + "deg)";
+      phone.style.setProperty("--gx", (30 + pointer.sx * 70 + inPhone * 40).toFixed(1) + "%");
+    }
+    let typing = false;
+    phoneLines.forEach((row) => {
+      const when = +row.dataset.at, on = inPhone >= when, mine = row.classList.contains("me");
+      if (on && !row.classList.contains("on") && !mine) { cast[0].vy = 3.6; cast[0].sq = 0.25; }
+      row.classList.toggle("on", on);
+      if (!mine && !on && inPhone >= when - 0.06) typing = true;
+    });
+    typingRow.classList.toggle("on", typing);
+    if (phoneSub.classList.contains("typing-now") !== typing) { phoneSub.textContent = typing ? "typing…" : "coordinator · online"; phoneSub.classList.toggle("typing-now", typing); }
+    banner.classList.toggle("on", inPhone >= 0.66);
+  }
 
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
@@ -355,7 +419,7 @@ const count = $("#count");
 let shown = 0;
 const tick = setInterval(() => {
   shown = Math.min(100, shown + 3 + Math.random() * 7); count.textContent = Math.floor(shown);
-  if (shown >= 100) { clearInterval(tick); document.documentElement.classList.add("ready"); chapters[0].classList.add("in"); }
+  if (shown >= 100) { clearInterval(tick); document.documentElement.classList.add("ready"); chapters[0].classList.add("in"); setTimeout(() => startHiring(clock.elapsedTime), 1300); }
 }, 40);
 renderer.compile(scene, camera);
 requestAnimationFrame(frame);

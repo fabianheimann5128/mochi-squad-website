@@ -13,7 +13,7 @@
 <link rel="canonical" href="https://mochi-squad.com/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=3c26094949">
+<link rel="stylesheet" href="styles.css?v=0f87dd86af">
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
 </head>
 <body>
@@ -33,10 +33,11 @@
 <main>
 <!-- 0 · hero -->
 <section class="chapter hero" id="top">
-  <h1 class="mega" data-lines><span class="soft">Your Mac just</span><span>hired a team.</span></h1>
-  <div class="hero-foot front">
-    <p>Mochi Squad turns Claude Code and Codex into named agents that live on your Mac. Open source. No API keys.</p>
-    <div class="cta">
+  <div class="hero-stage">
+    <p class="pill front"><i></i>Open source · macOS 14+ · No API keys</p>
+    <h1 class="mega" data-lines aria-label="Your Mac just hired a team."><span class="soft">Your Mac just</span><span>hired a <em id="hire">team.</em></span></h1>
+    <p class="hero-lead front">Mochi Squad turns Claude Code and Codex into named agents that live on your Mac.</p>
+    <div class="cta front">
       <a class="btn btn-light" href="#install" data-magnetic>Get it for Mac</a>
       <a class="btn btn-ghost" href="https://github.com/fabianheimann5128/mochi-squad" data-magnetic>Star on GitHub</a>
     </div>
@@ -72,20 +73,31 @@
 </section>
 
 <!-- 4 · phone -->
-<section class="chapter left phone-ch">
+<section class="chapter left phone-ch" id="phone-ch">
   <div class="copy">
     <p class="kicker">04 — From your phone</p>
     <h2 class="big" data-lines><span>Text your</span><span>coordinator</span><span>from the bus.</span></h2>
     <p class="body">Connect Telegram or WhatsApp. It knows what every agent is doing, hands out work and reports back.</p>
   </div>
-  <div class="phone front" id="phone">
-    <div class="phone-top"><i data-m="FFFFFF,none,oval,none"></i><b>Mochi</b><span>coordinator</span></div>
-    <div class="phone-chat">
-      <p class="me" data-at=".18">how's the release going?</p>
-      <p data-at=".34">Otto is done. Theo found one nit in the error text.</p>
-      <p data-at=".48">Want me to ship after the fix?</p>
-      <p class="me" data-at=".62">yes 🚀</p>
-      <p data-at=".76">On it. I'll ping you when it's live.</p>
+  <div class="phone front" id="phone" aria-hidden="true">
+    <div class="phone-screen">
+      <div class="island"></div>
+      <div class="status"><b>9:41</b><span class="sys">
+        <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+        <svg viewBox="0 0 16 12"><path d="M8 11.6 5.6 9.2a3.4 3.4 0 0 1 4.8 0zM3.5 7.1a6.4 6.4 0 0 1 9 0l1.4-1.4a8.4 8.4 0 0 0-11.8 0zM.7 4.3a10.4 10.4 0 0 1 14.6 0L16 3.6A11.6 11.6 0 0 0 0 3.6z"/></svg>
+        <i class="batt"><u></u></i></span></div>
+      <div class="phone-top"><span class="back">‹</span><i data-m="FFFFFF,none,oval,none"></i><div><b>Mochi</b><span id="phone-sub">coordinator · online</span></div></div>
+      <div class="phone-chat">
+        <div class="msg day on"><span>Today</span></div>
+        <div class="msg me" data-at=".26"><p>how's the release going?<small>9:41 ✓✓</small></p></div>
+        <div class="msg" data-at=".34"><p>Otto is done. Theo found one nit in the error text.<small>9:41</small></p></div>
+        <div class="msg" data-at=".42"><p>Want me to ship after the fix?<small>9:41</small></p></div>
+        <div class="msg me" data-at=".5"><p>yes 🚀<small>9:42 ✓✓</small></p></div>
+        <div class="msg" data-at=".58"><p>On it. I'll ping you when it's live.<small>9:42</small></p></div>
+        <div class="msg typing" id="typing"><p><i></i><i></i><i></i></p></div>
+      </div>
+      <div class="phone-input"><span>Message</span><i></i></div>
+      <div class="banner" id="banner"><i data-m="FFFFFF,none,oval,none"></i><div><b>Mochi</b><span>It's live. Theo signed off, Yuzu shipped it.</span></div><time>now</time></div>
     </div>
   </div>
 </section>
@@ -174,6 +186,6 @@
 </main>
 
 <script src="mochi.js?v=8c09a9621c"></script>
-<script type="module" src="app.js?v=0036363b0c"></script>
+<script type="module" src="app.js?v=348fd778c4"></script>
 </body>
 </html>

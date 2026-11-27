@@ -221,7 +221,21 @@ let hireAt = Infinity; const HIRE_STEP = 0.34;
 const hirePop = (i, time) => clamp((time - hireAt - (i - 1) * HIRE_STEP) / 0.5);
 const hire = $("#hire");
 function say(text, hex) { hire.textContent = text; hire.style.setProperty("--hc", hex ?? "var(--text)"); hire.classList.remove("flip"); void hire.offsetWidth; hire.classList.add("flip"); }
+// "hired a" stays where it sits in "hired a team." and only the job word grows to the right.
+const hireLine = hire.closest("[data-lines] > span");
+function anchorHire() {
+  hireLine.style.textAlign = ""; hireLine.style.paddingLeft = "";
+  if (getComputedStyle(hire).display === "block") return; // phones: the word has its own line
+  const keep = hire.textContent; hire.textContent = "team.";
+  const text = document.createRange(); text.selectNodeContents(hireLine.firstElementChild);
+  const free = hireLine.clientWidth - text.getBoundingClientRect().width;
+  hire.textContent = keep;
+  hireLine.style.textAlign = "left"; hireLine.style.paddingLeft = Math.max(0, free / 2) + "px";
+}
+document.fonts.ready.then(anchorHire); addEventListener("resize", anchorHire);
+
 function startHiring(now) {
+  anchorHire();
   hireAt = now;
   if (scrollY > innerHeight * 0.3 || matchMedia("(prefers-reduced-motion: reduce)").matches) { hireAt = -99; return; }
   HIRES.forEach((word, j) => setTimeout(() => { if (scrollY < innerHeight * 0.3) say(word, hexOf(CAST[j + 1].hex)); }, j * HIRE_STEP * 1000));

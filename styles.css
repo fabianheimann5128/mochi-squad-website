@@ -67,7 +67,7 @@ code { font: 500 .88em var(--mono); background: rgba(245,245,245,.1); padding: .
 
 .hero { min-height: 170vh; }
 .hero-stage { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: clamp(92px, 13svh, 150px); }
-.hero .mega { font-size: clamp(44px, 8.2vw, 160px); white-space: nowrap; margin-top: 22px; }
+.hero .mega { align-self: stretch; font-size: clamp(44px, 8.2vw, 160px); white-space: nowrap; margin-top: 22px; }
 .hero .mega .soft { color: rgba(245,245,245,.5); }
 #hire { display: inline-block; font-style: normal; color: var(--hc, var(--text)); transition: color .35s; }
 #hire.flip { animation: flip .42s var(--ease); }

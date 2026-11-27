@@ -141,7 +141,8 @@ let stage = 0; // which promise is on, as a smoothed number 0…4
 const FIVE = [1, 2, 3, 5, 6], STONES = [0, 1, 2, 3, 4].map((j) => [-4.4 + j * 2.0, 3.2 - j * 2.7]);
 const arcX = (i) => (i - 4.5) * 1.5, arcZ = (i) => -2.6 + Math.abs(i - 4.5) * 0.55;
 function layout(k, i) {
-  if (narrow() && (k === 1 || k === 8 || k === 10)) { const j = (i + 1) % N; return { x: (j % 3 - 1) * 1.75, z: (1 - Math.floor(j / 3)) * 1.9, s: 0.9, jump: k === 10 ? 1 : 0 }; }
+  if (narrow() && k === 8) return { x: (i - 4) * 0.5, z: 3, s: 0.42 };
+  if (narrow() && (k === 1 || k === 10)) { const j = (i + 1) % N; return { x: (j % 3 - 1) * 1.75, z: (1 - Math.floor(j / 3)) * 1.9, s: 0.9, jump: k === 10 ? 1 : 0 }; }
   switch (k) {
     case 0: { // the coordinator in front, the team in a V behind: four on each side
       if (i === 0) return { x: 0, z: 0.7, s: 0.95 };
@@ -166,7 +167,7 @@ function layout(k, i) {
       const a = (i - 1) / 7 * TAU; return { x: STONES[0][0] + Math.sin(a) * 0.95, z: STONES[0][1] + Math.cos(a) * 0.95, s: 0.42 };
     }
     case 7: return i === BUILD ? { x: 0, z: 0, s: 1.35, spin: 1 } : { x: (i % 2 ? 1 : -1) * (15 + i * 1.5), z: -3, s: 0.8 };
-    case 8: return { x: (i - 4) * 1.55, z: 0, s: 0.9 };
+    case 8: return { x: 2.75 + (i - 4) * 0.58, z: 1.6 - Math.abs(i - 4) * 0.12, s: 0.45 }; // a small crowd under the window, watching the install
     default: return { x: (i - 4) * 1.4, z: -Math.abs(i - 4) * 0.3, s: 0.95, jump: 1 };
   }
 }
@@ -180,7 +181,7 @@ const SHOTS = [
   { p: [7.5, 6.6, 15.5], l: [0, 1.0, 0], sx: -0.24, sy: 0.02, m: { sy: 0.25, far: 1.7 } },
   { p: [0, 2.7, 15.5], l: [0, 1.15, 0.6], sx: 0.27, sy: 0.04, m: { p: [0, 3.6, 19], l: [0, 1.0, 0.6], sy: 0.33, far: 1 } },
   { p: [0, 2.2, 11.5], l: [0, 1.25, 0], sx: 0.25, sy: 0.02, m: { sy: 0.36, far: 2.1 } },
-  { p: [0, 1.4, 16.5], l: [0, 2.2, 0], sx: 0, sy: 0.27, m: { ...GRID, sy: 0.36 } },
+  { p: [0, 1.4, 16.5], l: [0, 2.2, 0], sx: 0, sy: 0.19, m: { ...GRID, sy: 0.47 } },
   { p: [-5, 7.2, 17.5], l: [-0.4, 0.3, -2.2], sx: -0.23, sy: 0.02, m: { p: [-5, 15, 31], l: [-0.6, 0, -2.2], sy: 0.34, far: 1 } },
   { p: [0, 1.6, 15], l: [0, 2.2, 0], sx: 0, sy: 0.17, m: { ...GRID, sy: 0.2 } },
 ];
@@ -190,7 +191,7 @@ const MOOD = [
 ];
 const LAST = SHOTS.length - 1;
 // Pacing per chapter: [text starts leaving, text gone, scene starts moving]. The text always leaves before the scene changes.
-const PACE = (i) => i === 0 ? [0.42, 0.57, 0.55] : i === 4 ? [0.72, 0.8, 0.78] : i === 6 ? [0.84, 0.9, 0.88] : [0.56, 0.72, 0.64];
+const PACE = (i) => i === 0 ? [0.42, 0.57, 0.55] : i === 4 ? [0.72, 0.8, 0.78] : i === 8 ? [0.74, 0.82, 0.8] : i === 6 ? [0.84, 0.9, 0.88] : [0.56, 0.72, 0.64];
 const get = (o, key, fallback = 0) => o[key] ?? fallback;
 
 // ───────── tags: names, speech, sleep ─────────
@@ -300,6 +301,7 @@ function chapterAt(y) {
   for (let i = bounds.length - 1; i >= 0; i--) if (line >= bounds[i].top) return { index: i, part: clamp((line - bounds[i].top) / bounds[i].height) };
   return { index: 0, part: 0 };
 }
+const dmg = $("#dmg"), dmgIcon = $("#dmg-icon"), dmgFolder = $("#dmg-folder"), macDock = $("#mac-dock"), dmgSteps = $$("#dmg-steps li"); let dmgWas = false;
 const dock = $("#dock"), nav = $("#nav"), railNow = $("#rail-now"), railBar = $("#rail-bar"), body = document.body;
 const phone = $("#phone"), phoneLines = $$(".phone-chat .msg[data-at]"), typingRow = $("#typing"), phoneSub = $("#phone-sub"), banner = $("#banner");
 const copies = $$(".chapter .copy");
@@ -423,6 +425,26 @@ function frame() {
     typingRow.classList.toggle("on", typing);
     if (phoneSub.classList.contains("typing-now") !== typing) { phoneSub.textContent = typing ? "typing…" : "coordinator · online"; phoneSub.classList.toggle("typing-now", typing); }
     banner.classList.toggle("on", inPhone >= 0.66);
+  }
+
+  // Install: open the disk image, drag the app into Applications, it lands in the Dock and bounces; the squad cheers.
+  if (Math.abs(position - 8) < 1.3) {
+    const p = at.index === 8 ? at.part : at.index > 8 ? 1 : 0;
+    const enter = smooth(0.08, 0.24, p), leave = wide ? +chapters[8].dataset.out || 0 : 0;
+    if (wide) {
+      dmg.style.opacity = (enter * (1 - leave)).toFixed(3);
+      dmg.style.transform = "perspective(1800px) translate3d(0," + ((1 - enter) * 12 - leave * 5).toFixed(2) + "vh,0) rotateX(" + ((1 - enter) * 18 + 4 - pointer.sy * 6).toFixed(2) + "deg) rotateY(" + (-9 + pointer.sx * 10).toFixed(2) + "deg) scale(" + (0.92 + enter * 0.08).toFixed(3) + ")";
+    }
+    const drag = smooth(0.32, 0.5, p), dropped = p >= 0.5, launched = p >= 0.58;
+    const dx = dmgFolder.offsetLeft + dmgFolder.offsetWidth / 2 - (dmgIcon.parentNode.offsetLeft + dmgIcon.parentNode.offsetWidth / 2);
+    dmgIcon.style.transform = dropped ? "translate(" + dx + "px, 10px) scale(.25)" : "translate(" + (drag * dx).toFixed(1) + "px," + (-Math.sin(drag * Math.PI) * 34).toFixed(1) + "px) rotate(" + (Math.sin(drag * Math.PI) * -6).toFixed(1) + "deg) scale(" + (1 + Math.sin(drag * Math.PI) * 0.06).toFixed(3) + ")";
+    dmgIcon.style.opacity = dropped ? 0 : 1; dmgIcon.style.transition = dropped ? "transform .35s ease-in, opacity .3s" : "none";
+    dmgIcon.parentNode.classList.toggle("lift", drag > 0.01 && !dropped); dmgIcon.parentNode.classList.toggle("dropped", dropped);
+    dmgFolder.classList.toggle("hover", drag > 0.75 && !dropped);
+    if (dropped !== dmgWas) { dmgWas = dropped; dmgFolder.classList.toggle("got", dropped); if (dropped) cast.forEach((m, i) => { m.vy = 3.4 + (i % 3) * 0.8; }); }
+    macDock.classList.toggle("has", dropped); macDock.classList.toggle("launch", launched);
+    const step = p < 0.3 ? 0 : !dropped ? 1 : 2;
+    dmgSteps.forEach((li, j) => { li.classList.toggle("on", j === step); li.classList.toggle("done", j < step || (j === 2 && launched)); });
   }
 
   renderer.render(scene, camera);

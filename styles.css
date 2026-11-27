@@ -85,6 +85,7 @@ code { font: 500 .88em var(--mono); background: rgba(245,245,245,.1); padding: .
 @keyframes hint { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
 
 .big .soft, .promise .big .soft { display: block; color: rgba(245,245,245,.42); }
+.aside { font-style: normal; font-size: .42em; letter-spacing: -.03em; color: rgba(245,245,245,.42); margin-left: .25em; white-space: nowrap; }
 
 /* dock: the call to action that is always one tap away */
 .dock { position: fixed; z-index: 60; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 12px; padding: 7px 7px 7px 10px; border-radius: 999px;
@@ -179,6 +180,57 @@ code { font: 500 .88em var(--mono); background: rgba(245,245,245,.1); padding: .
 .pr { color: #00c972; margin-right: 10px; user-select: none; } .caret { display: inline-block; width: 9px; height: 1.1em; background: var(--text); vertical-align: -3px; margin-left: 6px; animation: caret 1s steps(1) infinite; }
 @keyframes caret { 50% { opacity: 0; } }
 .req { margin-top: 18px; color: var(--faint); font-size: 14px; max-width: 60ch; }
+.dl-ico { width: 18px; height: 18px; margin-left: -4px; }
+.btn-dl { height: 64px; padding: 0 34px; font-size: 18px; }
+.dl-row { display: flex; align-items: center; gap: 22px; margin-top: 34px; }
+.dl-all { white-space: nowrap; font: 500 13px var(--mono); color: var(--faint); border-bottom: 1px solid var(--edge); padding-bottom: 2px; transition: color .2s, border-color .2s; } .dl-all:hover { color: var(--text); border-color: var(--text); }
+.dl-meta { margin-top: 16px; font: 500 12.5px var(--mono); letter-spacing: .04em; color: var(--faint); }
+.install .req { max-width: 46ch; margin-top: 26px; }
+.src { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding: 6px 6px 6px 14px; border: 1px solid var(--edge); border-radius: 999px; width: fit-content; max-width: 100%; background: rgba(12,12,14,.6); backdrop-filter: blur(14px); font-size: 13px; color: var(--faint); }
+.src code { background: none; padding: 0; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.copy .dl-row, .copy .dl-meta, .copy .src { opacity: 0; transform: translateY(24px); transition: opacity .9s var(--ease) .4s, transform .9s var(--ease) .4s; }
+.in .copy .dl-row, .in .copy .dl-meta, .in .copy .src { opacity: 1; transform: none; }
+
+/* install: a disk image window; the app icon gets dragged into Applications as you scroll */
+.install { min-height: 250vh; }
+.dmg { position: sticky; top: max(13svh, 80px); margin: -100svh 5vw 0 auto; width: min(600px, 44vw); display: grid; gap: 22px; justify-items: center; opacity: 0; will-change: transform, opacity; }
+.dmg-win { width: 100%; border-radius: 16px; overflow: hidden; background: rgba(28,28,32,.82); backdrop-filter: blur(30px) saturate(1.4); border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 50px 120px -30px #000, inset 0 1px 0 rgba(255,255,255,.08); }
+.dmg-bar { position: relative; display: flex; align-items: center; height: 40px; padding: 0 14px; border-bottom: 1px solid rgba(255,255,255,.07); background: rgba(255,255,255,.03); }
+.dmg-bar span { position: absolute; left: 0; right: 0; text-align: center; font: 600 13px var(--body); color: var(--dim); pointer-events: none; }
+.dmg-body { position: relative; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 50px 30px 44px;
+  background: radial-gradient(80% 90% at 50% 0%, rgba(77,141,255,.10), transparent 70%); }
+.dmg-item { display: grid; justify-items: center; gap: 10px; font: 500 13px var(--body); color: var(--dim); }
+.dmg-item span { padding: 1px 7px; border-radius: 5px; }
+.dmg-app img { width: 112px; height: 112px; filter: drop-shadow(0 18px 24px rgba(0,0,0,.5)); will-change: transform; position: relative; z-index: 2; }
+.dmg-app.lift span { background: #2f6bff; color: #fff; }
+.dmg-app { position: relative; } .dmg-app .ghost { position: absolute; top: 0; left: 50%; translate: -50% 0; z-index: 1; opacity: 0; transition: opacity .3s; } .dmg-app.lift .ghost { opacity: .35; } .dmg-app.dropped .ghost { opacity: 1; }
+.dmg-arrow { width: min(120px, 9vw); fill: none; stroke: rgba(245,245,245,.35); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.folder { position: relative; display: block; width: 112px; height: 88px; margin-top: 12px; border-radius: 10px; background: linear-gradient(#6fb4ff, #3c8bf0); box-shadow: inset 0 1px 0 rgba(255,255,255,.4), 0 14px 22px -10px rgba(0,0,0,.6); }
+.folder::before { content: ""; position: absolute; left: 0; top: -10px; width: 44%; height: 18px; border-radius: 8px 10px 0 0; background: #4d9bf5; z-index: -1; }
+.folder::after { content: ""; position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; translate: -50% -42%; border: 3px solid rgba(255,255,255,.5); border-radius: 50%; border-top-color: transparent; transform: rotate(45deg); }
+.dmg-folder.hover .folder { filter: brightness(1.25); transform: scale(1.06); } .dmg-folder.hover span { background: rgba(245,245,245,.12); }
+.folder { transition: transform .35s var(--ease), filter .3s; }
+.dmg-folder.got .folder { animation: gulp .6s var(--ease); }
+@keyframes gulp { 40% { transform: scale(1.14, .9); } 70% { transform: scale(.96, 1.04); } }
+.dmg-steps { list-style: none; display: flex; gap: 4px; counter-reset: s; justify-content: center; white-space: nowrap; }
+.dmg-steps li { counter-increment: s; display: flex; align-items: center; gap: 7px; height: 32px; padding: 0 12px 0 4px; border-radius: 999px; font-size: 12.5px; color: var(--faint); border: 1px solid transparent; transition: all .45s var(--ease); }
+.dmg-steps li::before { content: counter(s); display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: rgba(245,245,245,.08); font: 500 11px var(--mono); }
+.dmg-steps li.on { color: var(--text); border-color: var(--edge); background: rgba(245,245,245,.06); } .dmg-steps li.on::before { background: var(--text); color: #111; }
+.dmg-steps li.done::before { content: "✓"; background: #00c972; color: #fff; }
+.mac-dock { display: flex; align-items: end; gap: 10px; padding: 9px 12px; border-radius: 22px; background: rgba(40,40,46,.55); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(24px); }
+.mac-dock i { width: 46px; height: 46px; border-radius: 12px; background: var(--c); box-shadow: inset 0 1px 0 rgba(255,255,255,.15); }
+.mac-dock img { width: 0; height: 52px; opacity: 0; margin: -3px -10px 0 0; transition: width .5s var(--ease), opacity .4s, margin .5s var(--ease); }
+.mac-dock.has img { width: 52px; opacity: 1; margin: -3px 0 0; }
+.mac-dock.launch img { animation: launch .7s cubic-bezier(.3,0,.4,1) 3; }
+@keyframes launch { 40% { transform: translateY(-22px); } }
+@media (max-width: 900px) {
+  .btn-dl { height: 56px; font-size: 16px; } .dl-row { margin-top: 24px; gap: 16px; } .install .req { font-size: 13px; margin-top: 14px; } .src { display: none; }
+  .install .big { font-size: 13vw; }
+  .dmg { top: 57svh; margin: -43svh auto 0; width: 100%; gap: 12px; opacity: 1; } .install .req { display: none; } .dl-meta { font-size: 11px; }
+  .dmg-body { padding: 26px 18px 22px; } .dmg-app img { width: 70px; height: 70px; } .folder { width: 70px; height: 56px; } .folder::after { width: 22px; height: 22px; }
+  .dmg-steps { display: none; } .mac-dock i { width: 34px; height: 34px; border-radius: 9px; } .mac-dock.has img { width: 38px; } .mac-dock img { height: 38px; }
+}
 
 /* final */
 .final { min-height: 100svh; display: grid; grid-template-rows: 1fr auto auto; justify-items: center; text-align: center; padding-top: 110px; gap: 26px; }

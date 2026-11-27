@@ -13,7 +13,7 @@
 <link rel="canonical" href="https://mochi-squad.com/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=e9580e4c7c">
+<link rel="stylesheet" href="styles.css?v=7d6231b406">
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
 </head>
 <body>
@@ -26,7 +26,7 @@
 
 <nav class="nav" id="nav">
   <a class="brand" href="#top"><img src="logo.svg" alt=""><b>mochi squad</b></a>
-  <a class="btn btn-light btn-sm" href="#install" data-magnetic>Get it for Mac</a>
+  <a class="btn btn-light btn-sm" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg" data-magnetic>Download for Mac</a>
 </nav>
 <aside class="rail" aria-hidden="true"><b id="rail-now">01</b><i><u id="rail-bar"></u></i><span>11</span></aside>
 
@@ -38,7 +38,7 @@
     <h1 class="mega" data-lines aria-label="Your Mac just hired a team."><span class="soft">Your Mac just</span><span>hired a <em id="hire">team.</em></span></h1>
     <p class="hero-lead front">Mochi Squad turns Claude Code and Codex into named agents that live on your Mac.</p>
     <div class="cta front">
-      <a class="btn btn-light" href="#install" data-magnetic>Get it for Mac</a>
+      <a class="btn btn-light" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg" data-magnetic><svg class="dl-ico" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v10m0 0-4-4m4 4 4-4M3.5 15.5h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download for Mac</a>
       <a class="btn btn-ghost" href="https://github.com/fabianheimann5128/mochi-squad" data-magnetic>Star on GitHub</a>
     </div>
   </div>
@@ -49,7 +49,7 @@
 <section class="chapter top">
   <div class="copy">
     <p class="kicker">01 — The squad</p>
-    <h2 class="big" data-lines><span>One is lonely.</span><span>Hire nine.</span><span class="soft">Or ninety-nine.</span></h2>
+    <h2 class="big" data-lines><span>One is lonely.</span><span>Hire nine. <em class="aside">Or ninety-nine.</em></span></h2>
     <p class="body">Every agent gets a name, a job, a character and a model. Claude Code or Codex, your call. They run on the subscription you already pay for.</p>
   </div>
 </section>
@@ -140,18 +140,30 @@
   </div>
 </section>
 
-<!-- 7 · install -->
-<section class="chapter top" id="install">
-  <div class="copy center front">
+<!-- 8 · install: the signed, notarized disk image; the window on the right acts out drag and drop as you scroll -->
+<section class="chapter left install" id="install">
+  <div class="copy front">
     <p class="kicker">08 — Install</p>
-    <h2 class="big" data-lines><span>Three commands.</span></h2>
-    <div class="term">
-      <div class="term-top"><div class="dots"><i></i><i></i><i></i></div><span>zsh</span><button id="copy" class="copy-btn">Copy</button></div>
-      <pre><code><span class="pr">$</span> git clone https://github.com/fabianheimann5128/mochi-squad.git
-<span class="pr">$</span> cd mochi-squad
-<span class="pr">$</span> ./setup.sh<span class="caret"></span></code></pre>
+    <h2 class="big" data-lines><span>Drag.</span><span>Drop.</span><span>Hired.</span></h2>
+    <div class="dl-row">
+      <a class="btn btn-light btn-dl" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg" data-magnetic><svg class="dl-ico" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v10m0 0-4-4m4 4 4-4M3.5 15.5h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download for Mac</a>
+      <a class="dl-all" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest">All versions</a>
     </div>
-    <p class="req">macOS 14+ · Xcode command line tools · Claude Code or Codex CLI with a subscription. The first build takes a few minutes.</p>
+    <p class="dl-meta">Free · macOS 14 or newer · Apple silicon and Intel</p>
+    <p class="req">Runs on your Claude Pro or Max, or ChatGPT Plus or Pro subscription, with Claude Code or Codex installed. Missing Apple's command line tools? The app installs them.</p>
+    <div class="src"><span>Or build it</span><code>git clone …/mochi-squad.git &amp;&amp; ./setup.sh</code><button id="copy" class="copy-btn">Copy</button></div>
+  </div>
+  <div class="dmg front" id="dmg" aria-hidden="true">
+    <div class="dmg-win">
+      <div class="dmg-bar"><div class="dots"><i></i><i></i><i></i></div><span>Mochi Squad</span></div>
+      <div class="dmg-body">
+        <div class="dmg-item dmg-app"><img class="ghost" src="app-icon.png" alt=""><img id="dmg-icon" src="app-icon.png" alt=""><span>Mochi Squad</span></div>
+        <svg class="dmg-arrow" viewBox="0 0 120 24"><path d="M4 12h104" stroke-dasharray="2 7"/><path d="m100 4 9 8-9 8"/></svg>
+        <div class="dmg-item dmg-folder" id="dmg-folder"><i class="folder"></i><span>Applications</span></div>
+      </div>
+    </div>
+    <ol class="dmg-steps" id="dmg-steps"><li>Open the disk image</li><li>Drag it to Applications</li><li>Start it. It updates itself.</li></ol>
+    <div class="mac-dock" id="mac-dock"><i style="--c:#3a3a42"></i><i style="--c:#2c4a7a"></i><i style="--c:#4a3a2c"></i><i style="--c:#2c5a46"></i><img id="dock-icon" src="app-icon.png" alt=""></div>
   </div>
 </section>
 
@@ -174,7 +186,7 @@
 <section class="chapter final">
   <h2 class="mega" data-lines><span>Assemble</span><span>your squad.</span></h2>
   <div class="cta front">
-    <a class="btn btn-light" href="#install" data-magnetic>Get it for Mac</a>
+    <a class="btn btn-light" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg" data-magnetic><svg class="dl-ico" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v10m0 0-4-4m4 4 4-4M3.5 15.5h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download for Mac</a>
     <a class="btn btn-ghost" href="https://github.com/fabianheimann5128/mochi-squad" data-magnetic>Star on GitHub</a>
   </div>
   <footer class="foot front">
@@ -189,10 +201,10 @@
 <div class="dock" id="dock">
   <img src="logo.svg" alt="">
   <div class="dock-txt"><b>Mochi Squad</b><span>Free · open source · macOS 14+</span></div>
-  <a class="btn btn-light btn-sm" href="#install" data-magnetic>Get it for Mac<i class="arrow" aria-hidden="true">↓</i></a>
+  <a class="btn btn-light btn-sm" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg" data-magnetic>Download for Mac<i class="arrow" aria-hidden="true">↓</i></a>
 </div>
 
 <script src="mochi.js?v=8c09a9621c"></script>
-<script type="module" src="app.js?v=bb0a60185f"></script>
+<script type="module" src="app.js?v=c41d4840a7"></script>
 </body>
 </html>

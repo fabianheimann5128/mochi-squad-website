@@ -14,8 +14,6 @@ const narrow = () => innerWidth < 900;
 // ───────── page chrome ─────────
 $$("[data-m]").forEach((el) => { const [hex, top, eyes, extra] = el.dataset.m.split(","); el.innerHTML = Mochi.render({ hex, top, eyes, extra }, { plate: true }); });
 $$("[data-lines] > span").forEach((line, i) => { line.innerHTML = `<i style="--i:${i % 5}">${line.innerHTML}</i>`; });
-// "Hire nine." gets its correction once the line has slid in (the line clips while it reveals, so open it afterwards)
-$$(".fixline").forEach((line) => line.firstElementChild.addEventListener("transitionend", () => { if (line.closest(".in")) setTimeout(() => line.classList.add("open"), 350); }));
 
 const cursor = $("#cursor");
 const pointer = { x: innerWidth / 2, y: innerHeight / 2, cx: innerWidth / 2, cy: innerHeight / 2, nx: 0, ny: 0, sx: 0, sy: 0 };

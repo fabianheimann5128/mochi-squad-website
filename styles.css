@@ -85,13 +85,9 @@ code { font: 500 .88em var(--mono); background: rgba(245,245,245,.1); padding: .
 @keyframes hint { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
 
 .big .soft, .promise .big .soft { display: block; color: rgba(245,245,245,.42); }
-/* "Hire nine." gets corrected by hand: a pink strike, "ninety-nine" scribbled above */
-.fix { position: relative; font-style: normal; display: inline-block; }
-.fix::after { content: ""; position: absolute; left: -.04em; right: -.04em; top: 52%; height: .085em; border-radius: .05em; background: #ff5eb1; rotate: -4deg; transform: scaleX(0); transform-origin: 0 50%; transition: transform .45s cubic-bezier(.6,0,.3,1) .15s; }
-.fix b { position: absolute; left: 50%; bottom: 74%; translate: -42% 0; rotate: -7deg; white-space: nowrap; font-size: .4em; letter-spacing: -.03em; color: #ff5eb1; opacity: 0; transform: translateY(.25em) scale(.9); transition: opacity .35s .55s, transform .5s var(--ease) .55s; }
-.fixline.open { overflow: visible !important; }
-.fixline.open .fix::after { transform: scaleX(1); }
-.fixline.open .fix b { opacity: 1; transform: none; }
+/* "Hire nine. Or more." stays on one line on wide screens; on phones "Or more." drops to the next line as a whole */
+.more { font-style: normal; white-space: nowrap; }
+@media (min-width: 901px) { .oneline { white-space: nowrap; width: max-content; } }
 
 /* dock: the call to action that is always one tap away */
 .dock { position: fixed; z-index: 60; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 12px; padding: 7px 7px 7px 10px; border-radius: 999px;

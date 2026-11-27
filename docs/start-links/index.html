@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start links – Mochi Squad docs</title>
+<meta name="description" content="The exact format of a routine&#x27;s start link, and how to open it from Shortcuts, Raycast or a script.">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:title" content="Start links – Mochi Squad docs">
+<meta property="og:description" content="The exact format of a routine&#x27;s start link, and how to open it from Shortcuts, Raycast or a script.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mochi-squad.com/docs/start-links/">
+<link rel="canonical" href="https://mochi-squad.com/docs/start-links/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css?v=6eb8280f59">
+<link rel="stylesheet" href="/docs.css?v=bd4f4a0953">
+<script src="/docs.js?v=8d673319eb" defer></script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#content">Skip to content</a>
+<header class="dnav">
+  <a class="brand" href="/"><img src="/logo.svg" alt=""><b>mochi squad</b></a>
+  <a class="dnav-docs" href="/docs/">Docs</a>
+  <button class="dsearch-open" type="button" aria-label="Search the docs"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Search</span><kbd>/</kbd></button>
+  <a class="btn btn-light btn-sm dnav-dl" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg"><svg class="dl-ico" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v10m0 0-4-4m4 4 4-4M3.5 15.5h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Download for Mac</span></a>
+  <button class="dmenu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="side"><i></i><i></i></button>
+</header>
+<div class="dsearch" role="dialog" aria-modal="true" aria-label="Search the docs" hidden>
+  <div class="dsearch-box">
+    <label class="dsearch-field"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" placeholder="Search titles and headings" autocomplete="off" spellcheck="false" aria-label="Search titles and headings"><kbd>esc</kbd></label>
+    <ul class="dsearch-results" role="listbox"></ul>
+    <p class="dsearch-empty" hidden>Nothing found. Try another word.</p>
+  </div>
+</div>
+<div class="dwrap">
+  <nav class="side" id="side" aria-label="Docs"><a class="side-home" href="/docs/">Overview</a><div class="side-part"><p>Getting started</p><ul><li><a href="/docs/install/">Download and install</a></li><li><a href="/docs/first-launch/">First launch</a></li><li><a href="/docs/sign-in/">Signing in</a></li><li><a href="/docs/first-project/">Projects</a></li><li><a href="/docs/first-agent/">Your first agent</a></li><li><a href="/docs/meet-the-coordinator/">Meet your coordinator</a></li><li><a href="/docs/updates/">Updates</a></li></ul></div><div class="side-part"><p>Guides</p><ul><li><a href="/docs/agents/">Agents</a></li><li><a href="/docs/access-levels/">Access levels and the sandbox</a></li><li><a href="/docs/chat/">Chat and console</a></li><li><a href="/docs/team-chat/">Team chat and @mentions</a></li><li><a href="/docs/coordinator/">The coordinator and its tools</a></li><li><a href="/docs/routines/">Routines</a></li><li><a href="/docs/skills/">Skills</a></li><li><a href="/docs/memory/">Mochi Memory</a></li><li><a href="/docs/messengers/">Telegram and WhatsApp</a></li><li><a href="/docs/computer-use/">Operating the computer</a></li><li><a href="/docs/plan-usage/">Plan usage</a></li><li><a href="/docs/tidy-up/">Tidying up long chats</a></li><li><a href="/docs/chatgpt-plans/">Several ChatGPT plans</a></li><li><a href="/docs/keep-awake/">Keeping the Mac awake</a></li><li><a href="/docs/dictation-and-attachments/">Dictation and attachments</a></li><li><a href="/docs/context-and-computer/">The Context and Computer tabs</a></li><li><a href="/docs/connectors/">Connectors</a></li></ul></div><div class="side-part"><p>Reference</p><ul><li><a href="/docs/settings/">Settings</a></li><li><a href="/docs/data/">Where your data is</a></li><li><a href="/docs/post-command/">The post command</a></li><li><a href="/docs/start-links/" aria-current="page">Start links</a></li><li><a href="/docs/keyboard-shortcuts/">Keyboard shortcuts</a></li><li><a href="/docs/files/">Files the app writes</a></li></ul></div><div class="side-part"><p>Help</p><ul><li><a href="/docs/faq/">FAQ</a></li><li><a href="/docs/troubleshooting/">Troubleshooting</a></li><li><a href="/docs/subscriptions/">Is this allowed with my subscription?</a></li><li><a href="/docs/security/">Security model</a></li><li><a href="/docs/feedback/">Report a bug or suggest a feature</a></li><li><a href="/docs/changelog/">Changelog</a></li></ul></div></nav>
+  <main class="dmain" id="content">
+    <article class="doc">
+      <p class="kicker">Reference</p>
+      <h1>Start links</h1>
+      <p class="lead">The exact format of a routine's start link, and how to open it from Shortcuts, Raycast or a script.</p>
+      <h2 id="format"><a class="hash" href="#format" aria-hidden="true" tabindex="-1">#</a>Format</h2>
+<div class="code"><pre><code>mochisquad://run?routine=&lt;id&gt;&amp;key=&lt;key&gt;&amp;text=&lt;task&gt;</code></pre></div>
+<div class="table"><table><thead><tr><th>Part</th><th>What it is</th></tr></thead><tbody><tr><td><code>routine</code></td><td>The routine's id, 8 characters.</td></tr><tr><td><code>key</code></td><td>A random key of 24 characters. Only a link with the right key starts the routine.</td></tr><tr><td><code>text</code></td><td>Optional. Your task for this run, URL-encoded, up to 2,000 characters.</td></tr></tbody></table></div>
+<p>You never build the link yourself: choose <strong>With a start link</strong> in a <a href="/docs/routines/">routine</a> and click <strong>Copy</strong>.</p>
+<h2 id="open-it"><a class="hash" href="#open-it" aria-hidden="true" tabindex="-1">#</a>Open it</h2>
+<p>From Terminal or a script:</p>
+<div class="code"><span class="code-lang">bash</span><pre><code>open "mochisquad://run?routine=ab12cd34&amp;key=…&amp;text=Check%20the%20inbox%20folder"</code></pre></div>
+<p>In Shortcuts, use the <strong>Open URLs</strong> action with the link. In Raycast, a Stream Deck or any launcher, add it as a link or URL.</p>
+<p>If Mochi Squad is closed, the link opens it. When the run starts, you get the notification <em>Routine started from its link.</em> (not for quiet routines).</p>
+<h2 id="what-happens-with-a-wrong-link"><a class="hash" href="#what-happens-with-a-wrong-link" aria-hidden="true" tabindex="-1">#</a>What happens with a wrong link</h2>
+<p>A link with a wrong key, an unknown routine, or a paused routine does nothing. There is no error message.</p>
+<h2 id="safety"><a class="hash" href="#safety" aria-hidden="true" tabindex="-1">#</a>Safety</h2>
+<ul><li>Anyone with the link can start the routine, in the sandbox, with the text they add, and use up some of your plan by starting it again and again.</li><li>Text from a link is handed to the agent as coming from an unknown sender: as information, not as instructions from you.</li><li>If a link leaked, click <strong>New link (the old one stops working)</strong> in the routine, then <strong>Save</strong>.</li></ul>
+    </article>
+    <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="/docs/post-command/"><small>Previous</small><b>The post command</b></a><a class="pager-next" href="/docs/keyboard-shortcuts/"><small>Next</small><b>Keyboard shortcuts</b></a></nav>
+    <footer class="foot dfoot">
+      <span><img src="/logo.svg" alt=""> mochi squad · Docs for version 0.2.1</span>
+      <span><a href="/">Home</a><a href="/docs/">Docs</a><a href="https://github.com/fabianheimann5128/mochi-squad">GitHub</a><a href="/impressum.html">Legal notice</a><a href="/datenschutz.html">Privacy</a></span>
+    </footer>
+  </main>
+  <nav class="toc" aria-label="On this page"><p>On this page</p><ul><li><a href="#format">Format</a></li><li><a href="#open-it">Open it</a></li><li><a href="#what-happens-with-a-wrong-link">What happens with a wrong link</a></li><li><a href="#safety">Safety</a></li></ul></nav>
+</div>
+</body>
+</html>

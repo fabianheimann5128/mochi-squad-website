@@ -55,8 +55,14 @@ code { font: 500 .88em var(--mono); background: rgba(245,245,245,.1); padding: .
 [data-lines] > span { display: block; overflow: hidden; padding: .04em .06em .12em 0; margin-bottom: -.12em; }
 [data-lines] > span > i { display: block; font-style: normal; transform: translateY(112%); transition: transform 1.1s var(--ease); transition-delay: calc(var(--i) * 90ms); }
 .in [data-lines] > span > i { transform: none; }
-.copy .kicker, .copy .body, .copy .controls, .copy .b-name, .copy .btn, .copy .req { opacity: 0; transform: translateY(24px); transition: opacity .9s var(--ease) .3s, transform .9s var(--ease) .3s; }
-.in .copy .kicker, .in .copy .body, .in .copy .controls, .in .copy .b-name, .in .copy .btn, .in .copy .req { opacity: 1; transform: none; }
+.copy .kicker, .copy .body, .copy .controls, .copy .b-name, .copy .btn, .copy .req, .copy .doc-link { opacity: 0; transform: translateY(24px); transition: opacity .9s var(--ease) .3s, transform .9s var(--ease) .3s; }
+.in .copy .kicker, .in .copy .body, .in .copy .controls, .in .copy .b-name, .in .copy .btn, .in .copy .req, .in .copy .doc-link { opacity: 1; transform: none; }
+/* a quiet way from a feature to its docs page */
+.doc-link { position: relative; z-index: 2; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font: 500 13px var(--mono); letter-spacing: .04em; color: var(--faint); border-bottom: 1px solid var(--edge); padding-bottom: 3px; transition: color .2s, border-color .2s, opacity .9s var(--ease) .3s, transform .9s var(--ease) .3s !important; }
+.doc-link i { font-style: normal; transition: translate .25s var(--ease); } .doc-link:hover { color: var(--text); border-color: var(--text); } .doc-link:hover i { translate: 3px 0; }
+.nav-end { display: flex; align-items: center; gap: 22px; }
+.nav-link { font: 500 14px var(--body); color: var(--dim); transition: color .2s; } .nav-link:hover { color: var(--text); }
+@media (max-width: 900px) { .nav-end { gap: 14px; } .nav.at-top .nav-end .btn { display: none; } .nav-link { font-size: 13.5px; } .doc-link { margin-top: 16px; font-size: 12px; } }
 
 /* chapters */
 .chapter { position: relative; min-height: 190vh; padding: 0 var(--pad); }

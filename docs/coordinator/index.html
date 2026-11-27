@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The coordinator and its tools – Mochi Squad docs</title>
+<meta name="description" content="What the coordinator can see and do through its built-in tools, and where its limits are.">
+<meta name="theme-color" content="#0a0a0a">
+<meta property="og:title" content="The coordinator and its tools – Mochi Squad docs">
+<meta property="og:description" content="What the coordinator can see and do through its built-in tools, and where its limits are.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://mochi-squad.com/docs/coordinator/">
+<link rel="canonical" href="https://mochi-squad.com/docs/coordinator/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css?v=6eb8280f59">
+<link rel="stylesheet" href="/docs.css?v=bd4f4a0953">
+<script src="/docs.js?v=8d673319eb" defer></script>
+</head>
+<body class="docs-page">
+<a class="skip" href="#content">Skip to content</a>
+<header class="dnav">
+  <a class="brand" href="/"><img src="/logo.svg" alt=""><b>mochi squad</b></a>
+  <a class="dnav-docs" href="/docs/">Docs</a>
+  <button class="dsearch-open" type="button" aria-label="Search the docs"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Search</span><kbd>/</kbd></button>
+  <a class="btn btn-light btn-sm dnav-dl" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg"><svg class="dl-ico" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v10m0 0-4-4m4 4 4-4M3.5 15.5h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Download for Mac</span></a>
+  <button class="dmenu" type="button" aria-label="Menu" aria-expanded="false" aria-controls="side"><i></i><i></i></button>
+</header>
+<div class="dsearch" role="dialog" aria-modal="true" aria-label="Search the docs" hidden>
+  <div class="dsearch-box">
+    <label class="dsearch-field"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m13 13 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><input type="search" placeholder="Search titles and headings" autocomplete="off" spellcheck="false" aria-label="Search titles and headings"><kbd>esc</kbd></label>
+    <ul class="dsearch-results" role="listbox"></ul>
+    <p class="dsearch-empty" hidden>Nothing found. Try another word.</p>
+  </div>
+</div>
+<div class="dwrap">
+  <nav class="side" id="side" aria-label="Docs"><a class="side-home" href="/docs/">Overview</a><div class="side-part"><p>Getting started</p><ul><li><a href="/docs/install/">Download and install</a></li><li><a href="/docs/first-launch/">First launch</a></li><li><a href="/docs/sign-in/">Signing in</a></li><li><a href="/docs/first-project/">Projects</a></li><li><a href="/docs/first-agent/">Your first agent</a></li><li><a href="/docs/meet-the-coordinator/">Meet your coordinator</a></li><li><a href="/docs/updates/">Updates</a></li></ul></div><div class="side-part"><p>Guides</p><ul><li><a href="/docs/agents/">Agents</a></li><li><a href="/docs/access-levels/">Access levels and the sandbox</a></li><li><a href="/docs/chat/">Chat and console</a></li><li><a href="/docs/team-chat/">Team chat and @mentions</a></li><li><a href="/docs/coordinator/" aria-current="page">The coordinator and its tools</a></li><li><a href="/docs/routines/">Routines</a></li><li><a href="/docs/skills/">Skills</a></li><li><a href="/docs/memory/">Mochi Memory</a></li><li><a href="/docs/messengers/">Telegram and WhatsApp</a></li><li><a href="/docs/computer-use/">Operating the computer</a></li><li><a href="/docs/plan-usage/">Plan usage</a></li><li><a href="/docs/tidy-up/">Tidying up long chats</a></li><li><a href="/docs/chatgpt-plans/">Several ChatGPT plans</a></li><li><a href="/docs/keep-awake/">Keeping the Mac awake</a></li><li><a href="/docs/dictation-and-attachments/">Dictation and attachments</a></li><li><a href="/docs/context-and-computer/">The Context and Computer tabs</a></li><li><a href="/docs/connectors/">Connectors</a></li></ul></div><div class="side-part"><p>Reference</p><ul><li><a href="/docs/settings/">Settings</a></li><li><a href="/docs/data/">Where your data is</a></li><li><a href="/docs/post-command/">The post command</a></li><li><a href="/docs/start-links/">Start links</a></li><li><a href="/docs/keyboard-shortcuts/">Keyboard shortcuts</a></li><li><a href="/docs/files/">Files the app writes</a></li></ul></div><div class="side-part"><p>Help</p><ul><li><a href="/docs/faq/">FAQ</a></li><li><a href="/docs/troubleshooting/">Troubleshooting</a></li><li><a href="/docs/subscriptions/">Is this allowed with my subscription?</a></li><li><a href="/docs/security/">Security model</a></li><li><a href="/docs/feedback/">Report a bug or suggest a feature</a></li><li><a href="/docs/changelog/">Changelog</a></li></ul></div></nav>
+  <main class="dmain" id="content">
+    <article class="doc">
+      <p class="kicker">Guides</p>
+      <h1>The coordinator and its tools</h1>
+      <p class="lead">What the coordinator can see and do through its built-in tools, and where its limits are.</p>
+      <h2 id="its-tools"><a class="hash" href="#its-tools" aria-hidden="true" tabindex="-1">#</a>Its tools</h2>
+<p>The coordinator talks to Mochi Squad through a small tool server on your Mac. It has seven tools:</p>
+<div class="table"><table><thead><tr><th>Tool</th><th>What it does</th></tr></thead><tbody><tr><td><code>list_projects</code></td><td>Lists the project folders in Mochi Squad.</td></tr><tr><td><code>overview</code></td><td>Shows every project: agents, what they work on, open sessions, routines and the last routine runs. Read only.</td></tr><tr><td><code>list_agents</code></td><td>Lists the agents of one project.</td></tr><tr><td><code>start_named_agent</code></td><td>Gives a named agent a task. It continues the agent's open session or starts a new one.</td></tr><tr><td><code>list_jobs</code></td><td>Lists running sessions of all projects and their state.</td></tr><tr><td><code>list_chats</code></td><td>Lists the saved chats of a project.</td></tr><tr><td><code>read_chat</code></td><td>Reads the recent messages of a saved chat.</td></tr></tbody></table></div>
+<p>A coordinator loads no other tool servers than this one.</p>
+<h2 id="what-you-can-ask-it"><a class="hash" href="#what-you-can-ask-it" aria-hidden="true" tabindex="-1">#</a>What you can ask it</h2>
+<ul><li><em>What is everyone working on?</em></li><li><em>Ask Otto to update the README, then tell me when it is done.</em></li><li><em>What did the morning routine find?</em></li><li><em>Read yesterday's chat with Mira and summarise it.</em></li></ul>
+<h2 id="limits"><a class="hash" href="#limits" aria-hidden="true" tabindex="-1">#</a>Limits</h2>
+<ul><li>It hands out at most 24 tasks per half hour and project, shared with the agents' own messages.</li><li>It cannot give a task to an agent with full access or computer use unless it may do the same itself. It asks you to write to that agent directly.</li><li>It does not create agents. If no fitting agent exists, it suggests that you create one.</li><li>What it may do in files follows its own <a href="/docs/access-levels/">access level</a>. By default it only reads.</li></ul>
+<h2 id="from-your-phone"><a class="hash" href="#from-your-phone" aria-hidden="true" tabindex="-1">#</a>From your phone</h2>
+<p>A message from <a href="/docs/messengers/">Telegram or WhatsApp</a> reaches the coordinator of one project and nobody else, with the rights you gave it. Whoever has your unlocked phone can give it tasks, so choose its access level with that in mind.</p>
+<h2 id="security"><a class="hash" href="#security" aria-hidden="true" tabindex="-1">#</a>Security</h2>
+<p>Each coordinator session gets its own key for the tool server, made at its start and withdrawn at its end. The server only listens on your Mac and refuses requests from a browser. Details in <a href="/docs/security/">Security</a>.</p>
+    </article>
+    <nav class="pager" aria-label="Previous and next page"><a class="pager-prev" href="/docs/team-chat/"><small>Previous</small><b>Team chat and @mentions</b></a><a class="pager-next" href="/docs/routines/"><small>Next</small><b>Routines</b></a></nav>
+    <footer class="foot dfoot">
+      <span><img src="/logo.svg" alt=""> mochi squad · Docs for version 0.2.1</span>
+      <span><a href="/">Home</a><a href="/docs/">Docs</a><a href="https://github.com/fabianheimann5128/mochi-squad">GitHub</a><a href="/impressum.html">Legal notice</a><a href="/datenschutz.html">Privacy</a></span>
+    </footer>
+  </main>
+  <nav class="toc" aria-label="On this page"><p>On this page</p><ul><li><a href="#its-tools">Its tools</a></li><li><a href="#what-you-can-ask-it">What you can ask it</a></li><li><a href="#limits">Limits</a></li><li><a href="#from-your-phone">From your phone</a></li><li><a href="#security">Security</a></li></ul></nav>
+</div>
+</body>
+</html>

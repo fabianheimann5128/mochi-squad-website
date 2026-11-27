@@ -1,0 +1,43 @@
+# Getting started
+install
+first-launch
+sign-in
+first-project
+first-agent
+meet-the-coordinator
+updates
+
+# Guides
+agents
+access-levels
+chat
+team-chat
+coordinator
+routines
+skills
+memory
+messengers
+computer-use
+plan-usage
+tidy-up
+chatgpt-plans
+keep-awake
+dictation-and-attachments
+context-and-computer
+connectors
+
+# Reference
+settings
+data
+post-command
+start-links
+keyboard-shortcuts
+files
+
+# Help
+faq
+troubleshooting
+subscriptions
+security
+feedback
+changelog

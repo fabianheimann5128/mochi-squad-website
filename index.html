@@ -13,7 +13,7 @@
 <link rel="canonical" href="https://mochi-squad.com/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=8c40d1c03f">
+<link rel="stylesheet" href="styles.css?v=6eb8280f59">
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
 </head>
 <body>
@@ -26,7 +26,7 @@
 
 <nav class="nav" id="nav">
   <a class="brand" href="#top"><img src="logo.svg" alt=""><b>mochi squad</b></a>
-  <a class="btn btn-light btn-sm" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg" data-magnetic>Download for Mac</a>
+  <span class="nav-end"><a class="nav-link" href="docs/">Docs</a><a class="btn btn-light btn-sm" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg" data-magnetic>Download for Mac</a></span>
 </nav>
 <aside class="rail" aria-hidden="true"><b id="rail-now">01</b><i><u id="rail-bar"></u></i><span>11</span></aside>
 
@@ -51,6 +51,7 @@
     <p class="kicker">01 — The squad</p>
     <h2 class="big" data-lines><span>One is lonely.</span><span class="oneline">Hire nine. <em class="more">Or more.</em></span></h2>
     <p class="body">Every agent gets a name, a job, a character and a model. Claude Code or Codex, your call. They run on the subscription you already pay for.</p>
+    <a class="doc-link" href="docs/agents/">Agents, models and looks<i aria-hidden="true">→</i></a>
   </div>
 </section>
 
@@ -60,6 +61,7 @@
     <p class="kicker">02 — Team chat</p>
     <h2 class="big" data-lines><span>They talk.</span><span>You don't</span><span>babysit.</span></h2>
     <p class="body">Write once. Your coordinator answers, <code>@name</code> pulls in a specialist, <code>@all</code> wakes everyone. Agents bring in colleagues on their own.</p>
+    <a class="doc-link" href="docs/team-chat/">How the team chat works<i aria-hidden="true">→</i></a>
   </div>
 </section>
 
@@ -69,6 +71,7 @@
     <p class="kicker">03 — Routines</p>
     <h2 class="big" data-lines><span>Night shift</span><span>included.</span></h2>
     <p class="body">Tasks at fixed times through the macOS scheduler, even when the app is closed. Morning report at 07:30. Dependency sweep at 02:00. You sleep.</p>
+    <a class="doc-link" href="docs/routines/">Everything routines can do<i aria-hidden="true">→</i></a>
   </div>
 </section>
 
@@ -78,6 +81,7 @@
     <p class="kicker">04 — From your phone</p>
     <h2 class="big" data-lines><span>Text your</span><span>coordinator</span><span>from the bus.</span></h2>
     <p class="body">Connect Telegram or WhatsApp. It knows what every agent is doing, hands out work and reports back.</p>
+    <a class="doc-link" href="docs/messengers/">Set up Telegram or WhatsApp<i aria-hidden="true">→</i></a>
   </div>
   <div class="phone front" id="phone" aria-hidden="true">
     <div class="phone-screen">
@@ -108,6 +112,7 @@
     <p class="kicker">05 — Rights</p>
     <h2 class="big" data-lines><span>They play in</span><span>a sandbox.</span><span>You hold</span><span>the keys.</span></h2>
     <p class="body">Read only by default. Edit in project, sandboxed, with your credentials locked away. Full access and computer use only when you flip the switch.</p>
+    <a class="doc-link" href="docs/access-levels/">Access levels and the sandbox<i aria-hidden="true">→</i></a>
   </div>
 </section>
 
@@ -151,6 +156,7 @@
     </div>
     <p class="dl-meta">Free · macOS 14 or newer · Apple silicon and Intel</p>
     <p class="req">Runs on your Claude Pro or Max, or ChatGPT Plus or Pro subscription, with Claude Code or Codex installed. Missing Apple's command line tools? The app installs them.</p>
+    <a class="doc-link" href="docs/install/">Install guide<i aria-hidden="true">→</i></a>
   </div>
   <div class="dmg front" id="dmg" aria-hidden="true">
     <div class="dmg-win">
@@ -190,7 +196,7 @@
   </div>
   <footer class="foot front">
     <span><img src="logo.svg" alt=""> mochi squad · © 2026 · Apache-2.0 · free forever</span>
-    <span><a href="https://github.com/fabianheimann5128/mochi-squad">GitHub</a><a href="https://github.com/fabianheimann5128/mochi-squad/blob/main/SECURITY.md">Security</a><a href="https://github.com/fabianheimann5128/mochi-squad/blob/main/CHANGELOG.md">Changelog</a><a href="impressum.html">Legal notice</a><a href="datenschutz.html">Privacy</a></span>
+    <span><a href="docs/">Docs</a><a href="https://github.com/fabianheimann5128/mochi-squad">GitHub</a><a href="docs/security/">Security</a><a href="docs/changelog/">Changelog</a><a href="impressum.html">Legal notice</a><a href="datenschutz.html">Privacy</a></span>
     <p>Independent project, not a product of Anthropic, OpenAI, Telegram or Meta. "Claude", "ChatGPT", "Telegram" and "WhatsApp" are trademarks of their owners. The WhatsApp link is unofficial.</p>
   </footer>
 </section>

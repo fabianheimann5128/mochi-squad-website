@@ -13,7 +13,7 @@
 <link rel="canonical" href="https://mochi-squad.com/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=7d6231b406">
+<link rel="stylesheet" href="styles.css?v=7c20c1be12">
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js" } }</script>
 </head>
 <body>
@@ -49,7 +49,7 @@
 <section class="chapter top">
   <div class="copy">
     <p class="kicker">01 — The squad</p>
-    <h2 class="big" data-lines><span>One is lonely.</span><span>Hire nine. <em class="aside">Or ninety-nine.</em></span></h2>
+    <h2 class="big" data-lines><span>One is lonely.</span><span class="fixline">Hire <em class="fix">nine<b aria-hidden="true">ninety-nine</b></em>.</span></h2>
     <p class="body">Every agent gets a name, a job, a character and a model. Claude Code or Codex, your call. They run on the subscription you already pay for.</p>
   </div>
 </section>
@@ -144,14 +144,13 @@
 <section class="chapter left install" id="install">
   <div class="copy front">
     <p class="kicker">08 — Install</p>
-    <h2 class="big" data-lines><span>Drag.</span><span>Drop.</span><span>Hired.</span></h2>
+    <h2 class="big" data-lines><span class="soft">Your team is</span><span>one download</span><span>away.</span></h2>
     <div class="dl-row">
       <a class="btn btn-light btn-dl" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest/download/MochiSquad.dmg" data-magnetic><svg class="dl-ico" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5v10m0 0-4-4m4 4 4-4M3.5 15.5h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download for Mac</a>
-      <a class="dl-all" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest">All versions</a>
+      <span class="dl-links"><a class="dl-all" href="https://github.com/fabianheimann5128/mochi-squad/releases/latest">All versions</a><a class="dl-all" href="https://github.com/fabianheimann5128/mochi-squad#readme">Build from source</a></span>
     </div>
     <p class="dl-meta">Free · macOS 14 or newer · Apple silicon and Intel</p>
     <p class="req">Runs on your Claude Pro or Max, or ChatGPT Plus or Pro subscription, with Claude Code or Codex installed. Missing Apple's command line tools? The app installs them.</p>
-    <div class="src"><span>Or build it</span><code>git clone …/mochi-squad.git &amp;&amp; ./setup.sh</code><button id="copy" class="copy-btn">Copy</button></div>
   </div>
   <div class="dmg front" id="dmg" aria-hidden="true">
     <div class="dmg-win">
@@ -205,6 +204,6 @@
 </div>
 
 <script src="mochi.js?v=8c09a9621c"></script>
-<script type="module" src="app.js?v=c41d4840a7"></script>
+<script type="module" src="app.js?v=543418f888"></script>
 </body>
 </html>

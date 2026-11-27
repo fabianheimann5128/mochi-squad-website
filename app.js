@@ -14,6 +14,8 @@ const narrow = () => innerWidth < 900;
 // ───────── page chrome ─────────
 $$("[data-m]").forEach((el) => { const [hex, top, eyes, extra] = el.dataset.m.split(","); el.innerHTML = Mochi.render({ hex, top, eyes, extra }, { plate: true }); });
 $$("[data-lines] > span").forEach((line, i) => { line.innerHTML = `<i style="--i:${i % 5}">${line.innerHTML}</i>`; });
+// "Hire nine." gets its correction once the line has slid in (the line clips while it reveals, so open it afterwards)
+$$(".fixline").forEach((line) => line.firstElementChild.addEventListener("transitionend", () => { if (line.closest(".in")) setTimeout(() => line.classList.add("open"), 350); }));
 
 const cursor = $("#cursor");
 const pointer = { x: innerWidth / 2, y: innerHeight / 2, cx: innerWidth / 2, cy: innerHeight / 2, nx: 0, ny: 0, sx: 0, sy: 0 };
@@ -262,11 +264,6 @@ $(".controls").addEventListener("click", (e) => { const c = e.target.closest(".c
 $("#shuffle").addEventListener("click", () => dress({ hex: pick(COLOURS.slice(1)), top: pick(TOPS) }, true));
 dress({}, false);
 
-const copy = $("#copy");
-copy.addEventListener("click", async () => {
-  try { await navigator.clipboard.writeText("git clone https://github.com/fabianheimann5128/mochi-squad.git && cd mochi-squad && ./setup.sh"); } catch { /* clipboard blocked: the commands stay selectable */ }
-  copy.textContent = "Copied ✓"; copy.classList.add("done"); setTimeout(() => { copy.textContent = "Copy"; copy.classList.remove("done"); }, 1800);
-});
 
 // "Open.": the Mochi turns to glass so you can see right through it
 function glass(m, v) {
@@ -278,7 +275,7 @@ function glass(m, v) {
 // Click a Mochi and it hops.
 const ray = new THREE.Raycaster(), tap = new THREE.Vector2();
 addEventListener("click", (e) => {
-  if (e.target.closest("a, button, input, .term")) return;
+  if (e.target.closest("a, button, input")) return;
   tap.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(tap, camera);
   const hit = ray.intersectObjects(cast.map((m) => m.root), true)[0];
   if (!hit) return;
